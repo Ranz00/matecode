@@ -11,7 +11,7 @@ export function ProtectedRoute({ children }: Props) {
     const { user, loading } = useAuth();
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center"><p>Cargando...</p></div>;
+        return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}><p>Cargando...</p></div>;
     }
 
     if (!user) {
