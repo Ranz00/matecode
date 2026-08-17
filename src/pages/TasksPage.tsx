@@ -1,7 +1,7 @@
 import { logoutUser } from "../services/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import "../../styles/pages.css";
+import "../styles/pages.css";
 
 export function TasksPage() {
     const { user } = useAuth();

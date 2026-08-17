@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerWithEmail, loginWithGoogle } from "../services/auth";
 import { traducirError } from "../utils/errors";
-import "../../styles/pages.css";
+import "../styles/pages.css";
 
 export function RegisterPage() {
     const [email, setEmail] = useState("");
