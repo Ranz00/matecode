@@ -1,8 +1,7 @@
-// Página de tareas (placeholder)
-
 import { logoutUser } from "../services/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import "../../styles/pages.css";
 
 export function TasksPage() {
     const { user } = useAuth();
@@ -14,14 +13,12 @@ export function TasksPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4">
-            <header className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold">MateCode - Mis Tareas</h1>
-                <div className="flex items-center gap-4">
-                    <span className="text-sm text-gray-600">{user?.email}</span>
-                    <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                        Cerrar Sesión
-                    </button>
+        <div style={{ minHeight: "100vh", background: "#f9fafb", padding: "16px" }}>
+            <header className="tasks-header">
+                <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>MateCode - Mis Tareas</h1>
+                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                    <span style={{ fontSize: "14px", color: "#6b7280" }}>{user?.email}</span>
+                    <button onClick={handleLogout} className="btn btn-danger" style={{ width: "auto" }}>Cerrar Sesión</button>
                 </div>
             </header>
             <main><p>Las tareas se implementarán en el Hito 6.</p></main>
