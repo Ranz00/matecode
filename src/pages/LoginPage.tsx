@@ -1,9 +1,8 @@
-// Página de inicio de sesión
-
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginWithEmail, loginWithGoogle } from "../services/auth";
 import { traducirError } from "../utils/errors";
+import "../../styles/pages.css";
 
 export function LoginPage() {
     const [email, setEmail] = useState("");
@@ -40,30 +39,26 @@ export function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h1 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h1>
-                {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
-                <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="page">
+            <div className="card">
+                <h1 style={{ fontSize: "24px", fontWeight: "bold", textAlign: "center", marginBottom: "24px" }}>Iniciar Sesión</h1>
+                {error && <div className="error">{error}</div>}
+                <form onSubmit={handleSubmit} className="form">
                     <div>
-                        <label className="block text-sm font-medium mb-1">Email</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border rounded px-3 py-2" />
+                        <label className="label">Email</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input" />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Password</label>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full border rounded px-3 py-2" />
+                        <label className="label">Password</label>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="input" />
                     </div>
-                    <button type="submit" disabled={loading} className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50">
-                        {loading ? "Ingresando..." : "Iniciar Sesión"}
-                    </button>
+                    <button type="submit" disabled={loading} className="btn btn-primary">{loading ? "Ingresando..." : "Iniciar Sesión"}</button>
                 </form>
-                <div className="mt-4">
-                    <button onClick={handleGoogleLogin} disabled={loading} className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 disabled:opacity-50">
-                        Continuar con Google
-                    </button>
+                <div style={{ marginTop: "16px" }}>
+                    <button onClick={handleGoogleLogin} disabled={loading} className="btn btn-danger">Continuar con Google</button>
                 </div>
-                <p className="text-center mt-4">
-                    ¿No tenés cuenta? <Link to="/register" className="text-blue-600 hover:underline">Registrate</Link>
+                <p style={{ textAlign: "center", marginTop: "16px" }}>
+                    ¿No tenés cuenta? <Link to="/register" className="link">Registrate</Link>
                 </p>
             </div>
         </div>
