@@ -1,6 +1,6 @@
 {
     "functions": {
-        "functions/sendEmail.ts": {
+        "api/sendEmail.ts": {
             "maxDuration": 10
         }
     }
