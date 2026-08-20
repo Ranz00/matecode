@@ -6,7 +6,7 @@ export interface User {
     displayName: string | null;
 }
 
-export interface Todo {
+export interface Task {
     id: string;
     title: string;
     description: string;
