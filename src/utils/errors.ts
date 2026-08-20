@@ -11,3 +11,11 @@ export function traducirError(code: string): string {
     };
     return errores[code] || "Error. Intentá de nuevo.";
 }
+
+// Helper para acceder a err.code de forma segura sin usar any
+export function getErrorCode(err: unknown): string {
+    if (err && typeof err === "object" && "code" in err) {
+        return (err as { code: string }).code;
+    }
+    return "unknown";
+}

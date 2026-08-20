@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerWithEmail, loginWithGoogle } from "../services/auth";
-import { traducirError } from "../utils/errors";
+import { traducirError, getErrorCode } from "../utils/errors";
 import "../styles/pages.css";
 
 export function RegisterPage() {
@@ -20,8 +20,8 @@ export function RegisterPage() {
         try {
             await registerWithEmail(email, password);
             navigate("/tasks");
-        } catch (err: any) {
-            setError(traducirError(err.code));
+       } catch (err: unknown) {
+           setError(traducirError(getErrorCode(err)));
         } finally {
             setLoading(false);
         }
@@ -33,8 +33,8 @@ export function RegisterPage() {
         try {
             await loginWithGoogle();
             navigate("/tasks");
-        } catch (err: any) {
-            setError(traducirError(err.code));
+       } catch (err: unknown) {
+           setError(traducirError(getErrorCode(err)));
         } finally {
             setLoading(false);
         }

@@ -1,0 +1,7 @@
+{
+    "functions": {
+        "functions/sendEmail.ts": {
+            "maxDuration": 10
+        }
+    }
+}
