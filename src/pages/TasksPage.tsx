@@ -1,6 +1,7 @@
 import { logoutUser } from "../services/auth";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { TodoList } from "../components/TodoList";
 import "../styles/pages.css";
 
 export function TasksPage() {
@@ -21,7 +22,9 @@ export function TasksPage() {
                     <button onClick={handleLogout} className="btn btn-danger" style={{ width: "auto" }}>Cerrar Sesión</button>
                 </div>
             </header>
-            <main><p>Las tareas se implementarán en el Hito 6.</p></main>
+            <main style={{ maxWidth: "600px", margin: "0 auto" }}>
+                <TodoList />
+            </main>
         </div>
     );
 }
