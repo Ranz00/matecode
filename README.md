@@ -10,10 +10,50 @@ MateCode permite a los usuarios crear, editar, completar y eliminar tareas de fo
 
 [https://matecode-beige.vercel.app](https://matecode-beige.vercel.app)
 
-## Arquitectura
+## Estructura
 
-MateCode/ ├── api/ │ └── sendEmail.ts # Vercel Function - AWS SES ├── src/ │ ├── components/ │ │ ├── ProtectedRoute.tsx # Guard de rutas autenticadas │ │ ├── TodoForm.tsx # Formulario de creación de tareas │ │ ├── TodoItem.tsx # Card individual de cada tarea │ │ └── TodoList.tsx # Orquestación CRUD + email │ ├── hooks/ │ │ ├── useAuth.ts # Observer de onAuthStateChanged │ │ └── useTasks.ts # Suscripción en tiempo real a tareas │ ├── pages/ │ │ ├── LoginPage.tsx │ │ ├── RegisterPage.tsx │ │ └── TasksPage.tsx │ ├── routes/ │ │ └── AppRouter.tsx # BrowserRouter con rutas protegidas │ ├── services/ │ │ ├── auth.ts # Firebase Auth (email + Google) │ │ ├── emailService.ts # Llama a Vercel Function /api/sendEmail │ │ ├── firebase.ts # Configuración Firebase │ │ └── taskService.ts # CRUD Firestore + onSnapshot │ ├── styles/ │ │ └── pages.css # Estilos compartidos │ ├── types/ │ │ └── index.ts # Interface Task │ └── utils/ │ └── errors.ts # Traducción de errores Firebase ├── tests/ │ ├── setup.ts │ ├── errors.test.ts │ ├── taskService.test.ts │ ├── TodoForm.test.tsx │ ├── TodoItem.test.tsx │ └── TodoList.test.tsx ├── .env.example ├── vercel.json ├── vitest.config.ts └── package.json
-
+```
+MateCode/
+├── api/
+│   └── sendEmail.ts
+├── src/
+│   ├── components/
+│   │   ├── ProtectedRoute.tsx
+│   │   ├── TodoForm.tsx
+│   │   ├── TodoItem.tsx
+│   │   └── TodoList.tsx
+│   ├── hooks/
+│   │   ├── useAuth.ts
+│   │   └── useTasks.ts
+│   ├── pages/
+│   │   ├── LoginPage.tsx
+│   │   ├── RegisterPage.tsx
+│   │   └── TasksPage.tsx
+│   ├── routes/
+│   │   └── AppRouter.tsx
+│   ├── services/
+│   │   ├── auth.ts
+│   │   ├── emailService.ts
+│   │   ├── firebase.ts
+│   │   └── taskService.ts
+│   ├── styles/
+│   │   └── pages.css
+│   ├── types/
+│   │   └── index.ts
+│   └── utils/
+│       └── errors.ts
+├── tests/
+│   ├── setup.ts
+│   ├── errors.test.ts
+│   ├── taskService.test.ts
+│   ├── TodoForm.test.tsx
+│   ├── TodoItem.test.tsx
+│   └── TodoList.test.tsx
+├── .env.example
+├── vercel.json
+├── vitest.config.ts
+└── package.json
+```
 ## Tecnologías
 
 - **Frontend:** React 19, TypeScript, React Router v7
