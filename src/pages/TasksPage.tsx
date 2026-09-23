@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { TodoList } from "../components/TodoList";
 import { Logo } from "../components/Logo";
+import { ThemeToggle } from "../components/ThemeToggle";
 import "../styles/pages.css";
 
 export function TasksPage() {
@@ -19,6 +20,7 @@ export function TasksPage() {
             <header className="tasks-header">
                 <Logo />
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                    <ThemeToggle />
                     <span style={{ fontSize: "14px", color: "#6b7280" }}>{user?.displayName ?? user?.email}</span>
                     <button onClick={handleLogout} className="btn btn-danger" style={{ width: "auto" }}>Cerrar Sesión</button>
                 </div>
