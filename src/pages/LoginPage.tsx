@@ -4,8 +4,7 @@ import { loginWithEmail, loginWithGoogle } from "../features/auth/Authenticator"
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import { validateEmail, validatePassword } from "../utils/validation";
 import { PasswordInput } from "../components/PasswordInput";
-import { Logo } from "../components/Logo";
-import { ThemeToggle } from "../components/ThemeToggle";
+import { AuthHeader } from "../components/AuthHeader";
 import { useToast } from "../components/Toast";
 import { pageClass, cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBtnClass, errorClass, linkClass } from "../styles/theme";
 
@@ -56,10 +55,7 @@ export function LoginPage() {
     return (
         <div className={pageClass}>
             <div className={cardClass}>
-                <div className="mb-6 flex items-center justify-between">
-                    <Logo size="sm" />
-                    <ThemeToggle />
-                </div>
+                <AuthHeader />
                 <h1 className="mb-6 text-center text-2xl font-bold text-slate-900 dark:text-white">Iniciar Sesión</h1>
                 {error && <div className={errorClass}>{error}</div>}
                 <form onSubmit={handleSubmit} className={formClass}>
