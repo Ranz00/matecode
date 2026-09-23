@@ -18,7 +18,7 @@ export function TasksPage() {
             <header className="tasks-header">
                 <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>MateCode - Mis Tareas</h1>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                    <span style={{ fontSize: "14px", color: "#6b7280" }}>{user?.email}</span>
+                    <span style={{ fontSize: "14px", color: "#6b7280" }}>{user?.displayName ?? user?.email}</span>
                     <button onClick={handleLogout} className="btn btn-danger" style={{ width: "auto" }}>Cerrar Sesión</button>
                 </div>
             </header>

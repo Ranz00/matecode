@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  updateProfile,
   onAuthStateChanged,
   type User,
 } from 'firebase/auth'
@@ -32,8 +33,12 @@ export function useAuthContext(): AuthContextValue {
 
 const googleProvider = new GoogleAuthProvider()
 
-export const registerWithEmail = (email: string, password: string) =>
-  createUserWithEmailAndPassword(auth, email, password)
+// Registro con nombre visible en el perfil
+export const registerWithEmail = async (name: string, email: string, password: string) => {
+  const credential = await createUserWithEmailAndPassword(auth, email, password)
+  await updateProfile(credential.user, { displayName: name })
+  return credential
+}
 
 export const loginWithEmail = (email: string, password: string) =>
   signInWithEmailAndPassword(auth, email, password)

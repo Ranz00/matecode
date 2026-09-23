@@ -5,6 +5,7 @@ import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import "../styles/pages.css";
 
 export function RegisterPage() {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,10 +16,12 @@ export function RegisterPage() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError("");
+        const trimmedName = name.trim();
+        if (trimmedName.length < 2) { setError("Ingresá tu nombre (mínimo 2 caracteres)"); return; }
         if (password !== confirmPassword) { setError("Las contraseñas no coinciden"); return; }
         setLoading(true);
         try {
-            await registerWithEmail(email, password);
+            await registerWithEmail(trimmedName, email, password);
             navigate("/tasks");
        } catch (err: unknown) {
            setError(traducirError(getErrorCode(err)));
@@ -46,6 +49,10 @@ export function RegisterPage() {
                 <h1 style={{ fontSize: "24px", fontWeight: "bold", textAlign: "center", marginBottom: "24px" }}>Crear Cuenta</h1>
                 {error && <div className="error">{error}</div>}
                 <form onSubmit={handleSubmit} className="form">
+                    <div>
+                        <label className="label">Nombre</label>
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="input" />
+                    </div>
                     <div>
                         <label className="label">Email</label>
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input" />
