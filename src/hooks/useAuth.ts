@@ -1,20 +1,9 @@
-// Hook para manejar el estado de autenticación
+// Hook para leer el estado de autenticación
+// Consume el contexto global, no crea observers propios
 
-import { useState, useEffect } from "react";
-import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { useAuthContext } from "../features/auth/Authenticator";
 
 export function useAuth() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
-
+    const { user, loading } = useAuthContext();
     return { user, loading };
 }
