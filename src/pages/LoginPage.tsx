@@ -2,11 +2,15 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginWithEmail, loginWithGoogle } from "../features/auth/Authenticator";
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
+import { validateEmail, validatePassword } from "../utils/validation";
+import { PasswordInput } from "../components/PasswordInput";
 import "../styles/pages.css";
 
 export function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [emailError, setEmailError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -14,9 +18,14 @@ export function LoginPage() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setError("");
+        const emailErr = validateEmail(email);
+        const passwordErr = validatePassword(password);
+        setEmailError(emailErr);
+        setPasswordError(passwordErr);
+        if (emailErr || passwordErr) return;
         setLoading(true);
         try {
-            await loginWithEmail(email, password);
+            await loginWithEmail(email.trim(), password);
             navigate("/tasks");
         } catch (err: unknown) {
             setError(traducirError(getErrorCode(err)));
@@ -46,12 +55,10 @@ export function LoginPage() {
                 <form onSubmit={handleSubmit} className="form">
                     <div>
                         <label className="label">Email</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input" />
+                        <input type="email" value={email} onChange={(e) => { const v = e.target.value; setEmail(v); if (emailError && !validateEmail(v)) setEmailError(null); }} onBlur={() => setEmailError(validateEmail(email))} required className="input" />
+                        {emailError && <p className="error">{emailError}</p>}
                     </div>
-                    <div>
-                        <label className="label">Password</label>
-                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="input" />
-                    </div>
+                    <PasswordInput label="Password" value={password} onChange={(v) => { setPassword(v); if (passwordError && !validatePassword(v)) setPasswordError(null); }} error={passwordError} onBlur={() => setPasswordError(validatePassword(password))} />
                     <button type="submit" disabled={loading} className="btn btn-primary">{loading ? "Ingresando..." : "Iniciar Sesión"}</button>
                 </form>
                 <div style={{ marginTop: "16px" }}>
