@@ -4,9 +4,11 @@ import { registerWithEmail, loginWithGoogle } from "../features/auth/Authenticat
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import { validateName, validateEmail, validatePassword, validateConfirm } from "../utils/validation";
 import { PasswordInput } from "../components/PasswordInput";
+import { useToast } from "../components/Toast";
 import "../styles/pages.css";
 
 export function RegisterPage() {
+    const { toast } = useToast();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -34,6 +36,7 @@ export function RegisterPage() {
         setLoading(true);
         try {
             await registerWithEmail(name.trim(), email.trim(), password);
+            toast("Cuenta creada, ¡bienvenido!");
             navigate("/tasks");
        } catch (err: unknown) {
            setError(traducirError(getErrorCode(err)));
@@ -47,6 +50,7 @@ export function RegisterPage() {
         setLoading(true);
         try {
             await loginWithGoogle();
+            toast("Sesión iniciada, ¡bienvenido!");
             navigate("/tasks");
        } catch (err: unknown) {
            setError(traducirError(getErrorCode(err)));

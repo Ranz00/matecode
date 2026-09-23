@@ -4,9 +4,11 @@ import { loginWithEmail, loginWithGoogle } from "../features/auth/Authenticator"
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import { validateEmail, validatePassword } from "../utils/validation";
 import { PasswordInput } from "../components/PasswordInput";
+import { useToast } from "../components/Toast";
 import "../styles/pages.css";
 
 export function LoginPage() {
+    const { toast } = useToast();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState<string | null>(null);
@@ -26,6 +28,7 @@ export function LoginPage() {
         setLoading(true);
         try {
             await loginWithEmail(email.trim(), password);
+            toast("Sesión iniciada, ¡bienvenido!");
             navigate("/tasks");
         } catch (err: unknown) {
             setError(traducirError(getErrorCode(err)));
@@ -39,6 +42,7 @@ export function LoginPage() {
         setLoading(true);
         try {
             await loginWithGoogle();
+            toast("Sesión iniciada, ¡bienvenido!");
             navigate("/tasks");
         } catch (err: unknown) {
            setError(traducirError(getErrorCode(err)));

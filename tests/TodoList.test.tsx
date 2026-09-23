@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { TodoList } from "../src/components/TodoList";
+import { ToastProvider } from "../src/components/Toast";
 
 const mockUseAuth = vi.fn();
 const mockUseTasks = vi.fn();
@@ -31,12 +32,12 @@ describe("TodoList", () => {
     });
 
     it("muestra mensaje cuando no hay tareas", () => {
-        render(<TodoList />);
+        render(<ToastProvider><TodoList /></ToastProvider>);
         expect(screen.getByText("No tenés tareas todavía. ¡Agregá una!")).toBeInTheDocument();
     });
 
     it("muestra formulario de carga", () => {
-        render(<TodoList />);
+        render(<ToastProvider><TodoList /></ToastProvider>);
         expect(screen.getByPlaceholderText("¿Qué tenés que hacer?")).toBeInTheDocument();
     });
 
@@ -48,7 +49,7 @@ describe("TodoList", () => {
             loading: false,
             error: null,
         });
-        render(<TodoList />);
+        render(<ToastProvider><TodoList /></ToastProvider>);
         expect(screen.getByText("Enviar resumen por email")).toBeInTheDocument();
     });
 
@@ -61,7 +62,7 @@ describe("TodoList", () => {
             loading: false,
             error: null,
         });
-        render(<TodoList />);
+        render(<ToastProvider><TodoList /></ToastProvider>);
         expect(screen.getByText("Tarea 1")).toBeInTheDocument();
         expect(screen.getByText("Tarea 2")).toBeInTheDocument();
     });

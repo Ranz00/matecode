@@ -5,9 +5,11 @@ import { sendEmail } from "../services/emailService";
 import { useState } from "react";
 import { TodoForm } from "./TodoForm";
 import { TodoItem } from "./TodoItem";
+import { useToast } from "./Toast";
 
 export function TodoList() {
     const { user } = useAuth();
+    const { toast } = useToast();
     const { tasks, loading, error } = useTasks(user?.uid);
     const [actionLoading, setActionLoading] = useState(false);
     const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -64,8 +66,10 @@ export function TodoList() {
                 body: summary,
             });
             setEmailStatus("sent");
+            toast("Resumen enviado por email");
         } catch {
             setEmailStatus("error");
+            toast("No se pudo enviar, intentá de nuevo", "error");
         }
     };
 
@@ -91,8 +95,6 @@ export function TodoList() {
                     >
                         {emailStatus === "sending" ? "Enviando..." : "Enviar resumen por email"}
                     </button>
-                    {emailStatus === "sent" && <p style={{ color: "#16a34a", fontSize: "14px" }}>Email enviado correctamente</p>}
-                    {emailStatus === "error" && <p style={{ color: "#dc2626", fontSize: "14px" }}>Error al enviar email</p>}
                 </div>
             )}
 
