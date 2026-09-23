@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginWithEmail, loginWithGoogle } from "../services/auth";
-import { traducirError, getErrorCode } from "../utils/errors";
+import { loginWithEmail, loginWithGoogle } from "../features/auth/Authenticator";
+import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import "../styles/pages.css";
 
 export function LoginPage() {

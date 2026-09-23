@@ -1,4 +1,4 @@
-import { logoutUser } from "../services/auth";
+import { logoutUser } from "../features/auth/Authenticator";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { TodoList } from "../components/TodoList";
