@@ -1,5 +1,7 @@
 # MateCode
 
+> **Línea principal nueva:** este branch `matecode` es el desarrollo activo (MateCode renovado y completo). La entrega M4 original quedó congelada en `main`.
+
 Aplicación de gestión de tareas construida como proyecto integrador del Módulo 4 de Henry.
 
 ## Descripción
