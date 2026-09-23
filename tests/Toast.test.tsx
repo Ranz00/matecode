@@ -15,8 +15,8 @@ describe('Toast', () => {
       </ToastProvider>,
     )
     fireEvent.click(screen.getByRole('button', { name: 'Avisar' }))
-    expect(
-      screen.getByRole('status', { name: 'Cuenta creada, ¡bienvenido!' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Cuenta creada, ¡bienvenido!',
+    )
   })
 })
