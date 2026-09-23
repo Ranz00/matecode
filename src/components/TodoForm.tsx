@@ -1,6 +1,7 @@
 // Formulario para crear tareas
 
 import { useState, type FormEvent } from "react";
+import { formClass, labelClass, inputClass, primaryBtnClass } from "../styles/theme";
 
 interface Props {
     onAdd: (title: string, description: string) => void;
@@ -20,29 +21,29 @@ export function TodoForm({ onAdd, loading }: Props) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="form" style={{ marginBottom: "24px" }}>
+        <form onSubmit={handleSubmit} className={`${formClass} mb-6`}>
             <div>
-                <label className="label">Título</label>
+                <label className={labelClass}>Título</label>
                 <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="¿Qué tenés que hacer?"
                     required
-                    className="input"
+                    className={inputClass}
                 />
             </div>
             <div>
-                <label className="label">Descripción (opcional)</label>
+                <label className={labelClass}>Descripción (opcional)</label>
                 <input
                     type="text"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Detalle breve..."
-                    className="input"
+                    className={inputClass}
                 />
             </div>
-            <button type="submit" disabled={loading || !title.trim()} className="btn btn-primary">
+            <button type="submit" disabled={loading || !title.trim()} className={primaryBtnClass}>
                 {loading ? "Agregando..." : "Agregar tarea"}
             </button>
         </form>

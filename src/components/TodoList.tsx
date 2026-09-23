@@ -6,6 +6,7 @@ import { useState } from "react";
 import { TodoForm } from "./TodoForm";
 import { TodoItem } from "./TodoItem";
 import { useToast } from "./Toast";
+import { errorClass } from "../styles/theme";
 
 export function TodoList() {
     const { user } = useAuth();
@@ -75,11 +76,11 @@ export function TodoList() {
     };
 
     if (loading) {
-        return <p>Cargando tareas...</p>;
+        return <p className="text-slate-500 dark:text-slate-400">Cargando tareas...</p>;
     }
 
     if (error) {
-        return <div className="error">{error}</div>;
+        return <div className={errorClass}>{error}</div>;
     }
 
     // Filtro de vista, no toca los datos
@@ -96,7 +97,7 @@ export function TodoList() {
             <TodoForm onAdd={handleAdd} loading={actionLoading} />
 
             {tasks.length > 0 && (
-                <div className="flex gap-2" style={{ marginBottom: "16px" }}>
+                <div className="mb-4 flex gap-2">
                     {filters.map((f) => (
                         <button
                             key={f.key}
@@ -116,8 +117,7 @@ export function TodoList() {
                     <button
                         onClick={handleSendSummary}
                         disabled={emailStatus === "sending"}
-                        className="btn btn-primary"
-                        style={{ width: "auto", marginBottom: "16px" }}
+                        className="mb-4 w-auto rounded-md bg-violet-600 px-4 py-2 font-medium text-white transition hover:bg-violet-700 disabled:opacity-50"
                     >
                         {emailStatus === "sending" ? "Enviando..." : "Enviar resumen por email"}
                     </button>
@@ -125,7 +125,7 @@ export function TodoList() {
             )}
 
             {tasks.length === 0 ? (
-                <p style={{ textAlign: "center", color: "#6b7280" }}>
+                <p className="text-center text-slate-500 dark:text-slate-400">
                     No tenés tareas todavía. ¡Agregá una!
                 </p>
             ) : (

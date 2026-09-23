@@ -2,6 +2,7 @@
 // El error lo maneja la página que lo usa
 
 import { useId, useState } from "react";
+import { labelClass, inputClass, errorClass } from "../styles/theme";
 
 interface PasswordInputProps {
     label: string;
@@ -17,7 +18,7 @@ export function PasswordInput({ label, value, onChange, error, onBlur }: Passwor
 
     return (
         <div>
-            <label htmlFor={inputId} className="label">{label}</label>
+            <label htmlFor={inputId} className={labelClass}>{label}</label>
             <div style={{ position: "relative" }}>
                 <input
                     id={inputId}
@@ -26,7 +27,7 @@ export function PasswordInput({ label, value, onChange, error, onBlur }: Passwor
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={onBlur}
                     required
-                    className="input"
+                    className={inputClass}
                     style={{ paddingRight: "72px" }}
                 />
                 <button
@@ -38,7 +39,7 @@ export function PasswordInput({ label, value, onChange, error, onBlur }: Passwor
                     {visible ? "Ocultar" : "Mostrar"}
                 </button>
             </div>
-            {error && <p className="error">{error}</p>}
+            {error && <p className={errorClass}>{error}</p>}
         </div>
     );
 }

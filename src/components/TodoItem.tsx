@@ -1,8 +1,8 @@
-
 // Card individual de cada tarea
 
 import { useState, type FormEvent } from "react";
 import type { Task } from "../types";
+import { formClass, inputClass, smallPrimaryBtnClass, smallDangerBtnClass, smallGrayBtnClass } from "../styles/theme";
 
 interface Props {
     task: Task;
@@ -26,27 +26,27 @@ export function TodoItem({ task, onToggle, onUpdate, onDelete, loading }: Props)
 
     if (editing) {
         return (
-            <div className="card" style={{ maxWidth: "100%", marginBottom: "12px" }}>
-                <form onSubmit={handleSave} className="form">
+            <div className="mb-3 rounded-lg bg-white p-4 shadow dark:bg-slate-900">
+                <form onSubmit={handleSave} className={formClass}>
                     <input
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="input"
+                        className={inputClass}
                         required
                     />
                     <input
                         type="text"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="input"
+                        className={inputClass}
                         placeholder="Descripción..."
                     />
-                    <div style={{ display: "flex", gap: "8px" }}>
-                        <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: "auto" }}>
+                    <div className="flex gap-2">
+                        <button type="submit" disabled={loading} className={smallPrimaryBtnClass}>
                             Guardar
                         </button>
-                        <button type="button" onClick={() => setEditing(false)} className="btn btn-danger" style={{ width: "auto", background: "#6b7280" }}>
+                        <button type="button" onClick={() => setEditing(false)} className={smallGrayBtnClass}>
                             Cancelar
                         </button>
                     </div>
@@ -56,37 +56,31 @@ export function TodoItem({ task, onToggle, onUpdate, onDelete, loading }: Props)
     }
 
     return (
-        <div className="card" style={{ maxWidth: "100%", marginBottom: "12px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div className="mb-3 rounded-lg bg-white p-4 shadow dark:bg-slate-900">
+            <div className="flex items-center gap-3">
                 <input
                     type="checkbox"
                     checked={task.completed}
                     onChange={() => onToggle(task.id, task.completed)}
-                    style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                    className="h-5 w-5 cursor-pointer accent-violet-600"
                 />
-                <div style={{ flex: 1 }}>
-                    <p style={{
-                        fontSize: "16px",
-                        fontWeight: "500",
-                        textDecoration: task.completed ? "line-through" : "none",
-                        opacity: task.completed ? 0.6 : 1,
-                        margin: 0,
-                    }}>
+                <div className="flex-1">
+                    <p className={`text-base font-medium text-slate-900 dark:text-white ${task.completed ? "line-through opacity-60" : ""}`}>
                         {task.title}
                     </p>
                     {task.description && (
-                        <p style={{ fontSize: "14px", color: "#6b7280", margin: "4px 0 0" }}>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                             {task.description}
                         </p>
                     )}
                 </div>
-                <button onClick={() => setEditing(true)} className="btn btn-primary" style={{ width: "auto", padding: "6px 12px", fontSize: "14px" }}>
+                <button onClick={() => setEditing(true)} className={smallPrimaryBtnClass}>
                     Editar
                 </button>
-                <button onClick={() => onDelete(task.id)} disabled={loading} className="btn btn-danger" style={{ width: "auto", padding: "6px 12px", fontSize: "14px" }}>
+                <button onClick={() => onDelete(task.id)} disabled={loading} className={smallDangerBtnClass}>
                     Eliminar
                 </button>
             </div>
-</div>
+        </div>
     );
 }

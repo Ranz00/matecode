@@ -21,6 +21,15 @@ export const primaryBtnClass =
 export const dangerBtnClass =
     "w-full rounded-md bg-red-600 px-4 py-2.5 font-medium text-white transition hover:bg-red-700 disabled:opacity-50";
 
+export const smallPrimaryBtnClass =
+    "rounded-md bg-violet-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-violet-700 disabled:opacity-50";
+
+export const smallDangerBtnClass =
+    "rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50";
+
+export const smallGrayBtnClass =
+    "rounded-md bg-slate-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-slate-600 disabled:opacity-50";
+
 export const errorClass =
     "mb-4 rounded-md bg-red-100 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300";
 
