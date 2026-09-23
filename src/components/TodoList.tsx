@@ -7,6 +7,7 @@ import { TodoForm } from "./TodoForm";
 import { TodoItem } from "./TodoItem";
 import { useToast } from "./Toast";
 import { errorClass } from "../styles/theme";
+import type { TaskFormValues } from "../types";
 
 export function TodoList() {
     const { user } = useAuth();
@@ -16,7 +17,7 @@ export function TodoList() {
     const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
     const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
 
-    const handleAdd = async (title: string, description: string) => {
+    const handleAdd = async ({ title, description }: TaskFormValues) => {
         if (!user) return;
         setActionLoading(true);
         try {

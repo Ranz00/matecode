@@ -9,3 +9,9 @@ export interface Task {
     createdAt: Date;
     updatedAt: Date;
 }
+
+// Valores del formulario de tareas, un solo objeto
+export interface TaskFormValues {
+    title: string;
+    description: string;
+}

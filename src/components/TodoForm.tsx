@@ -1,10 +1,11 @@
 // Formulario para crear tareas
 
 import { useState, type FormEvent } from "react";
+import type { TaskFormValues } from "../types";
 import { formClass, labelClass, inputClass, primaryBtnClass } from "../styles/theme";
 
 interface Props {
-    onAdd: (title: string, description: string) => void;
+    onAdd: (values: TaskFormValues) => void;
     loading: boolean;
 }
 
@@ -15,7 +16,7 @@ export function TodoForm({ onAdd, loading }: Props) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (!title.trim()) return;
-        onAdd(title.trim(), description.trim());
+        onAdd({ title: title.trim(), description: description.trim() });
         setTitle("");
         setDescription("");
     };
