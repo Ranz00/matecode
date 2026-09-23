@@ -6,7 +6,7 @@ import { validateName, validateEmail, validatePassword, validateConfirm } from "
 import { PasswordInput } from "../components/PasswordInput";
 import { AuthHeader } from "../components/AuthHeader";
 import { useToast } from "../components/Toast";
-import { pageClass, cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBtnClass, errorClass, linkClass } from "../styles/theme";
+import { cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBtnClass, errorClass, linkClass } from "../styles/theme";
 
 export function RegisterPage() {
     const { toast } = useToast();
@@ -61,9 +61,10 @@ export function RegisterPage() {
     };
 
     return (
-        <div className={pageClass}>
+        <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
+            <AuthHeader />
+            <div className="flex items-center justify-center px-4 py-8">
             <div className={cardClass}>
-                <AuthHeader />
                 <h1 className="mb-6 text-center text-2xl font-bold text-slate-900 dark:text-white">Crear Cuenta</h1>
                 {error && <div className={errorClass}>{error}</div>}
                 <form onSubmit={handleSubmit} className={formClass}>
@@ -87,6 +88,7 @@ export function RegisterPage() {
                 <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
                     ¿Ya tenés cuenta? <Link to="/login" className={linkClass}>Iniciá sesión</Link>
                 </p>
+            </div>
             </div>
         </div>
     );

@@ -1,16 +1,16 @@
-// Encabezado de las cards de auth
-// Marca a la izquierda y tema a la derecha, con línea separadora sutil
+// Encabezado superior de las páginas de auth
+// Marca grande a la izquierda y tema a la derecha, con línea clara debajo
 
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function AuthHeader() {
     return (
-        <header className="mb-6 border-b border-slate-200 pb-4 dark:border-slate-800">
-            <div className="flex items-center justify-between">
-                <Logo size="sm" />
+        <div className="mx-auto w-full max-w-md px-4 pt-6">
+            <div className="flex items-center justify-between border-b border-slate-300 pb-4 dark:border-white/20">
+                <Logo size="lg" />
                 <ThemeToggle />
             </div>
-        </header>
+        </div>
     );
 }
