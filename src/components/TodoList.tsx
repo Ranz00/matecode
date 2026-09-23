@@ -13,6 +13,7 @@ export function TodoList() {
     const { tasks, loading, error } = useTasks(user?.uid);
     const [actionLoading, setActionLoading] = useState(false);
     const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+    const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
 
     const handleAdd = async (title: string, description: string) => {
         if (!user) return;
@@ -81,9 +82,34 @@ export function TodoList() {
         return <div className="error">{error}</div>;
     }
 
+    // Filtro de vista, no toca los datos
+    const visibleTasks = tasks.filter((t) => filter === "all" || (filter === "done") === t.completed);
+
+    const filters = [
+        { key: "all", label: "Todas" },
+        { key: "pending", label: "Pendientes" },
+        { key: "done", label: "Completadas" },
+    ] as const;
+
     return (
         <div>
             <TodoForm onAdd={handleAdd} loading={actionLoading} />
+
+            {tasks.length > 0 && (
+                <div className="flex gap-2" style={{ marginBottom: "16px" }}>
+                    {filters.map((f) => (
+                        <button
+                            key={f.key}
+                            type="button"
+                            onClick={() => setFilter(f.key)}
+                            aria-pressed={filter === f.key}
+                            className={`rounded-full px-3 py-1 text-sm font-medium transition ${filter === f.key ? "bg-violet-600 text-white" : "bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"}`}
+                        >
+                            {f.label}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {tasks.length > 0 && (
                 <div style={{ marginBottom: "16px" }}>
@@ -103,7 +129,7 @@ export function TodoList() {
                     No tenés tareas todavía. ¡Agregá una!
                 </p>
             ) : (
-                tasks.map((task) => (
+                visibleTasks.map((task) => (
                     <TodoItem
                         key={task.id}
                         task={task}

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { TodoList } from "../src/components/TodoList";
 import { ToastProvider } from "../src/components/Toast";
 
@@ -64,6 +64,26 @@ describe("TodoList", () => {
         });
         render(<ToastProvider><TodoList /></ToastProvider>);
         expect(screen.getByText("Tarea 1")).toBeInTheDocument();
+        expect(screen.getByText("Tarea 2")).toBeInTheDocument();
+    });
+
+    it("filtra pendientes y completadas", () => {
+        mockUseTasks.mockReturnValue({
+            tasks: [
+                { id: "1", title: "Tarea 1", description: "Desc 1", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date() },
+                { id: "2", title: "Tarea 2", description: "Desc 2", completed: true, userId: "user1", createdAt: new Date(), updatedAt: new Date() },
+            ],
+            loading: false,
+            error: null,
+        });
+        render(<ToastProvider><TodoList /></ToastProvider>);
+
+        fireEvent.click(screen.getByRole("button", { name: "Pendientes" }));
+        expect(screen.getByText("Tarea 1")).toBeInTheDocument();
+        expect(screen.queryByText("Tarea 2")).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "Completadas" }));
+        expect(screen.queryByText("Tarea 1")).not.toBeInTheDocument();
         expect(screen.getByText("Tarea 2")).toBeInTheDocument();
     });
 });
