@@ -4,8 +4,10 @@ import { registerWithEmail, loginWithGoogle } from "../features/auth/Authenticat
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import { validateName, validateEmail, validatePassword, validateConfirm } from "../utils/validation";
 import { PasswordInput } from "../components/PasswordInput";
+import { Logo } from "../components/Logo";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { useToast } from "../components/Toast";
-import "../styles/pages.css";
+import { pageClass, cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBtnClass, errorClass, linkClass } from "../styles/theme";
 
 export function RegisterPage() {
     const { toast } = useToast();
@@ -52,38 +54,42 @@ export function RegisterPage() {
             await loginWithGoogle();
             toast("Sesión iniciada, ¡bienvenido!");
             navigate("/tasks");
-       } catch (err: unknown) {
-           setError(traducirError(getErrorCode(err)));
+        } catch (err: unknown) {
+            setError(traducirError(getErrorCode(err)));
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="page">
-            <div className="card">
-                <h1 style={{ fontSize: "24px", fontWeight: "bold", textAlign: "center", marginBottom: "24px" }}>Crear Cuenta</h1>
-                {error && <div className="error">{error}</div>}
-                <form onSubmit={handleSubmit} className="form">
+        <div className={pageClass}>
+            <div className={cardClass}>
+                <div className="mb-6 flex items-center justify-between">
+                    <Logo size="sm" />
+                    <ThemeToggle />
+                </div>
+                <h1 className="mb-6 text-center text-2xl font-bold text-slate-900 dark:text-white">Crear Cuenta</h1>
+                {error && <div className={errorClass}>{error}</div>}
+                <form onSubmit={handleSubmit} className={formClass}>
                     <div>
-                        <label className="label">Nombre</label>
-                        <input type="text" value={name} onChange={(e) => { const v = e.target.value; setName(v); if (nameError && !validateName(v)) setNameError(null); }} onBlur={() => setNameError(validateName(name))} required className="input" />
-                        {nameError && <p className="error">{nameError}</p>}
+                        <label className={labelClass}>Nombre</label>
+                        <input type="text" value={name} onChange={(e) => { const v = e.target.value; setName(v); if (nameError && !validateName(v)) setNameError(null); }} onBlur={() => setNameError(validateName(name))} required className={inputClass} />
+                        {nameError && <p className={errorClass}>{nameError}</p>}
                     </div>
                     <div>
-                        <label className="label">Email</label>
-                        <input type="email" value={email} onChange={(e) => { const v = e.target.value; setEmail(v); if (emailError && !validateEmail(v)) setEmailError(null); }} onBlur={() => setEmailError(validateEmail(email))} required className="input" />
-                        {emailError && <p className="error">{emailError}</p>}
+                        <label className={labelClass}>Email</label>
+                        <input type="email" value={email} onChange={(e) => { const v = e.target.value; setEmail(v); if (emailError && !validateEmail(v)) setEmailError(null); }} onBlur={() => setEmailError(validateEmail(email))} required className={inputClass} />
+                        {emailError && <p className={errorClass}>{emailError}</p>}
                     </div>
                     <PasswordInput label="Password" value={password} onChange={(v) => { setPassword(v); if (passwordError && !validatePassword(v)) setPasswordError(null); }} error={passwordError} onBlur={() => setPasswordError(validatePassword(password))} />
                     <PasswordInput label="Confirmar Password" value={confirmPassword} onChange={(v) => { setConfirmPassword(v); if (confirmError && !validateConfirm(password, v)) setConfirmError(null); }} error={confirmError} onBlur={() => setConfirmError(validateConfirm(password, confirmPassword))} />
-                    <button type="submit" disabled={loading} className="btn btn-primary">{loading ? "Creando cuenta..." : "Registrarse"}</button>
+                    <button type="submit" disabled={loading} className={primaryBtnClass}>{loading ? "Creando cuenta..." : "Registrarse"}</button>
                 </form>
-                <div style={{ marginTop: "16px" }}>
-                    <button onClick={handleGoogleRegister} disabled={loading} className="btn btn-danger">Continuar con Google</button>
+                <div className="mt-4">
+                    <button onClick={handleGoogleRegister} disabled={loading} className={dangerBtnClass}>Continuar con Google</button>
                 </div>
-                <p style={{ textAlign: "center", marginTop: "16px" }}>
-                    ¿Ya tenés cuenta? <Link to="/login" className="link">Iniciá sesión</Link>
+                <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
+                    ¿Ya tenés cuenta? <Link to="/login" className={linkClass}>Iniciá sesión</Link>
                 </p>
             </div>
         </div>
