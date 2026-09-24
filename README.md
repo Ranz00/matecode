@@ -140,6 +140,7 @@ Servicios externos mockeados: los tests no hacen llamadas reales.
 - **Nombre visible:** el registro guarda `displayName` con `updateProfile`; Google ya lo trae. El header muestra nombre con fallback a email.
 - **Tema por clase `.dark`:** variante custom de Tailwind v4 con persistencia en `localStorage` y respeto a la preferencia del sistema.
 - **`api/` y no `functions/`:** Vercel descubre las functions en `api/`. Se documenta para no confundir con la estructura sugerida.
+- **Rewrites SPA en Vercel:** toda ruta que no sea `/api/*` cae en `index.html` para que refresh y URLs directas no den 404. En local Vite ya lo hace solo; en prod hay que declararlo en `vercel.json`.
 
 ## Uso de IA
 
