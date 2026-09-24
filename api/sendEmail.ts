@@ -33,8 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             },
         });
 
-        const result = await sesClient.send(command);
-        console.log("SES enviado", { to, messageId: result.MessageId });
+        await sesClient.send(command);
         return res.status(200).json({ success: true });
     } catch (error) {
         return res.status(500).json({ error: "Failed to send email" });
