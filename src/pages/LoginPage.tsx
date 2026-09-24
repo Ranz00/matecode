@@ -6,6 +6,7 @@ import { validateEmail, validatePassword } from "../utils/validation";
 import { PasswordInput } from "../components/PasswordInput";
 import { AuthHeader } from "../components/AuthHeader";
 import { useToast } from "../components/Toast";
+import { FcGoogle } from "react-icons/fc";
 import { cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBtnClass, errorClass, linkClass } from "../styles/theme";
 
 export function LoginPage() {
@@ -69,7 +70,7 @@ export function LoginPage() {
                     <button type="submit" disabled={loading} className={primaryBtnClass}>{loading ? "Ingresando..." : "Iniciar Sesión"}</button>
                 </form>
                 <div className="mt-4">
-                    <button onClick={handleGoogleLogin} disabled={loading} className={dangerBtnClass}>Continuar con Google</button>
+                    <button onClick={handleGoogleLogin} disabled={loading} className={`${dangerBtnClass} flex items-center justify-center gap-2`}><FcGoogle size={20} aria-hidden="true" />Continuar con Google</button>
                 </div>
                 <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
                     ¿No tenés cuenta? <Link to="/register" className={linkClass}>Registrate</Link>

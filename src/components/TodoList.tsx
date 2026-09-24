@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { createTask, toggleTaskCompleted, updateTask, deleteTask } from "../services/taskService";
 import { sendEmail } from "../services/emailService";
 import { useState } from "react";
+import { FiSend } from "react-icons/fi";
 import { TodoForm } from "./TodoForm";
 import { TodoItem } from "./TodoItem";
 import { useToast } from "./Toast";
@@ -118,8 +119,9 @@ export function TodoList() {
                     <button
                         onClick={handleSendSummary}
                         disabled={emailStatus === "sending"}
-                        className="mb-4 w-auto rounded-md bg-violet-600 px-4 py-2 font-medium text-white transition hover:bg-violet-700 disabled:opacity-50"
+                        className="mb-4 flex w-auto items-center justify-center gap-2 rounded-md bg-violet-600 px-4 py-2 font-medium text-white transition hover:bg-violet-700 disabled:opacity-50"
                     >
+                        <FiSend size={16} aria-hidden="true" />
                         {emailStatus === "sending" ? "Enviando..." : "Enviar resumen por email"}
                     </button>
                 </div>

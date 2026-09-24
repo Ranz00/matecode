@@ -2,6 +2,7 @@ import { logoutUser } from "../features/auth/Authenticator";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { TodoList } from "../components/TodoList";
+import { FiLogOut } from "react-icons/fi";
 import { Logo } from "../components/Logo";
 import { ThemeToggle } from "../components/ThemeToggle";
 
@@ -22,7 +23,7 @@ export function TasksPage() {
                     <div className="flex items-center gap-4">
                         <ThemeToggle />
                         <span className="text-sm text-slate-500 dark:text-slate-400">{user?.displayName ?? user?.email}</span>
-                        <button onClick={handleLogout} className="rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700">Cerrar Sesión</button>
+                        <button onClick={handleLogout} className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-red-700">Cerrar Sesión<FiLogOut size={16} aria-hidden="true" /></button>
                     </div>
                 </div>
             </header>
