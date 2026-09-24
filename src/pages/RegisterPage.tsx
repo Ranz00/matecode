@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { registerWithEmail, loginWithGoogle } from "../features/auth/Authenticator";
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import { validateName, validateEmail, validatePassword, validateConfirm } from "../utils/validation";
+import { useAuth } from "../hooks/useAuth";
 import { PasswordInput } from "../components/PasswordInput";
 import { AuthHeader } from "../components/AuthHeader";
 import { useToast } from "../components/Toast";
@@ -11,6 +12,7 @@ import { cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBt
 
 export function RegisterPage() {
     const { toast } = useToast();
+    const { user: authUser, loading: authLoading } = useAuth();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -66,6 +68,7 @@ export function RegisterPage() {
             <AuthHeader />
             <div className="flex items-center justify-center px-4 py-8">
             <div className={cardClass}>
+                {(!authLoading && authUser) && <Navigate to="/tasks" replace />}
                 <h1 className="mb-6 text-center text-2xl font-bold text-slate-900 dark:text-white">Crear Cuenta</h1>
                 {error && <div className={errorClass}>{error}</div>}
                 <form onSubmit={handleSubmit} className={formClass}>

@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { TodoList } from "../components/TodoList";
 import { FiLogOut } from "react-icons/fi";
-import { Logo } from "../components/Logo";
+import { LogoLink } from "../components/LogoLink";
 import { ThemeToggle } from "../components/ThemeToggle";
 
 export function TasksPage() {
@@ -19,7 +19,7 @@ export function TasksPage() {
         <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
             <header className="w-full border-b border-slate-300 bg-slate-200 dark:border-white/20 dark:bg-slate-900">
                 <div className="flex items-center justify-between px-4 py-3">
-                    <Logo />
+                    <LogoLink />
                     <div className="flex items-center gap-4">
                         <ThemeToggle />
                         <span className="text-sm text-slate-500 dark:text-slate-400">{user?.displayName ?? user?.email}</span>

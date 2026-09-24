@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { loginWithEmail, loginWithGoogle } from "../features/auth/Authenticator";
 import { traducirError, getErrorCode } from "../features/auth/authErrors";
 import { validateEmail, validatePassword } from "../utils/validation";
+import { useAuth } from "../hooks/useAuth";
 import { PasswordInput } from "../components/PasswordInput";
 import { AuthHeader } from "../components/AuthHeader";
 import { useToast } from "../components/Toast";
@@ -11,6 +12,7 @@ import { cardClass, formClass, labelClass, inputClass, primaryBtnClass, dangerBt
 
 export function LoginPage() {
     const { toast } = useToast();
+    const { user: authUser, loading: authLoading } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState<string | null>(null);
@@ -58,6 +60,7 @@ export function LoginPage() {
             <AuthHeader />
             <div className="flex items-center justify-center px-4 py-8">
             <div className={cardClass}>
+                {(!authLoading && authUser) && <Navigate to="/tasks" replace />}
                 <h1 className="mb-6 text-center text-2xl font-bold text-slate-900 dark:text-white">Iniciar Sesión</h1>
                 {error && <div className={errorClass}>{error}</div>}
                 <form onSubmit={handleSubmit} className={formClass}>
