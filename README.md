@@ -1,6 +1,6 @@
 # MateCode
 
-> **Línea principal nueva:** este branch `matecode` es el desarrollo activo (MateCode renovado y completo). La entrega M4 original quedó congelada en `main`.
+> **Rama principal:** `main` trae el MateCode renovado y completo. La entrega M4 original se conserva en el branch `matecode-legacy` (no es principal).
 
 Aplicación de gestión de tareas construida como proyecto integrador del Módulo 4 de Henry.
 

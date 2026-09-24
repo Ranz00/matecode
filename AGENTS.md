@@ -1,4 +1,4 @@
-# AGENTS.md — MateCode (branch `matecode`)
+# AGENTS.md — MateCode (rama `main`)
 
 Guía para agentes que trabajan en este repo. Leer antes de tocar código.
 
@@ -31,6 +31,6 @@ pnpm exec tsc -b  # tipado, debe quedar en 0 errores
 
 - Un incremento = implementar → `tsc` 0 → `vitest` verde → commit chico. Nunca commitear en rojo.
 - Tests para comportamiento nuevo o corregido. Mocks de Firebase/hooks, sin llamadas reales.
-- No tocar: `.env` (ni leerlo), branch `main`, settings de GitHub/Vercel, `dev/MateCode` es worktree del branch `matecode` (el repo vive en el clon de referencia).
+- No tocar: `.env` (ni leerlo), branch `matecode-legacy`, settings de GitHub/Vercel. `dev/MateCode` es worktree de `main` (el repo vive en el clon de referencia).
 - Sin `--force`, sin amend de commits pusheados, sin carpetas vacías.
 - Dudas de diseño o alcance: preguntar antes de aplicar.
