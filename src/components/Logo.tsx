@@ -10,7 +10,7 @@ export function Logo({ size = "md" }: LogoProps) {
     return (
         <span className={`font-extrabold tracking-tight ${textSize}`}>
             <span className="bg-gradient-to-r from-violet-600 to-purple-400 bg-clip-text text-transparent">Mate</span>
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">Code</span>
+            <span className="bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">Code</span>
         </span>
     );
 }
