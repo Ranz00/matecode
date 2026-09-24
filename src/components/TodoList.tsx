@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { createTask, toggleTaskCompleted, updateTask, deleteTask } from "../services/taskService";
 import { sendEmail } from "../services/emailService";
 import { useState } from "react";
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiClipboard } from "react-icons/fi";
 import { TodoForm } from "./TodoForm";
 import { TodoItem } from "./TodoItem";
 import { useToast } from "./Toast";
@@ -95,11 +95,13 @@ export function TodoList() {
 
     // Filtro de vista, no toca los datos
     const visibleTasks = tasks.filter((t) => filter === "all" || (filter === "done") === t.completed);
+    const pendingCount = tasks.filter((t) => !t.completed).length;
+    const doneCount = tasks.length - pendingCount;
 
     const filters = [
-        { key: "all", label: "Todas" },
-        { key: "pending", label: "Pendientes" },
-        { key: "done", label: "Completadas" },
+        { key: "all", label: `Todas (${tasks.length})` },
+        { key: "pending", label: `Pendientes (${pendingCount})` },
+        { key: "done", label: `Completadas (${doneCount})` },
     ] as const;
 
     return (
@@ -114,7 +116,7 @@ export function TodoList() {
                             type="button"
                             onClick={() => setFilter(f.key)}
                             aria-pressed={filter === f.key}
-                            className={`rounded-full px-3 py-1 text-sm font-medium transition ${filter === f.key ? "bg-violet-600 text-white" : "bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"}`}
+                            className={`rounded-full px-3 py-1 text-sm font-medium transition ${filter === f.key ? "bg-gradient-to-r from-violet-600 to-purple-500 text-white shadow-md shadow-violet-600/20" : "bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"}`}
                         >
                             {f.label}
                         </button>
@@ -136,9 +138,10 @@ export function TodoList() {
             )}
 
             {tasks.length === 0 ? (
-                <p className="text-center text-slate-500 dark:text-slate-400">
-                    No tenés tareas todavía. ¡Agregá una!
-                </p>
+                <div className="flex flex-col items-center gap-2 py-8 text-center text-slate-500 dark:text-slate-400">
+                    <FiClipboard size={32} aria-hidden="true" className="opacity-60" />
+                    <p>No tenés tareas todavía. ¡Agregá una!</p>
+                </div>
             ) : (
                 visibleTasks.map((task) => (
                     <TodoItem

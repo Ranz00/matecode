@@ -87,7 +87,7 @@ export function RegisterPage() {
                     <button type="submit" disabled={loading} className={primaryBtnClass}>{loading ? "Creando cuenta..." : "Registrarse"}</button>
                 </form>
                 <div className="mt-4">
-                    <button onClick={handleGoogleRegister} disabled={loading} className={`${dangerBtnClass} flex items-center justify-center gap-2`}><FcGoogle size={20} aria-hidden="true" />Continuar con Google</button>
+                    <button onClick={handleGoogleRegister} disabled={loading} className={dangerBtnClass}><FcGoogle size={20} aria-hidden="true" />Continuar con Google</button>
                 </div>
                 <p className="mt-4 text-center text-sm text-slate-600 dark:text-slate-300">
                     ¿Ya tenés cuenta? <Link to="/login" className={linkClass}>Iniciá sesión</Link>

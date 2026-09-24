@@ -26,7 +26,7 @@ export function TodoItem({ task, onToggle, onUpdate, onDelete, loading }: Props)
 
     if (editing) {
         return (
-            <div className="mb-3 rounded-lg bg-white p-4 shadow dark:bg-slate-900">
+            <div className="mb-3 rounded-2xl border border-slate-200 bg-white p-4 shadow dark:border-white/10 dark:bg-slate-900">
                 <form onSubmit={handleSave} className={formClass}>
                     <input
                         type="text"
@@ -56,7 +56,7 @@ export function TodoItem({ task, onToggle, onUpdate, onDelete, loading }: Props)
     }
 
     return (
-        <div className="mb-3 rounded-lg bg-white p-4 shadow dark:bg-slate-900">
+        <div className={`mb-3 rounded-2xl border border-slate-200 border-l-4 bg-white p-4 shadow transition hover:-translate-y-0.5 dark:border-white/10 dark:bg-slate-900 ${task.completed ? "border-l-emerald-500/60" : "border-l-violet-500"}`}>
             <div className="flex items-center gap-3">
                 <input
                     type="checkbox"

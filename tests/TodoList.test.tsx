@@ -86,11 +86,11 @@ describe("TodoList", () => {
         });
         render(<ToastProvider><TodoList /></ToastProvider>);
 
-        fireEvent.click(screen.getByRole("button", { name: "Pendientes" }));
+        fireEvent.click(screen.getByRole("button", { name: /Pendientes/ }));
         expect(screen.getByText("Tarea 1")).toBeInTheDocument();
         expect(screen.queryByText("Tarea 2")).not.toBeInTheDocument();
 
-        fireEvent.click(screen.getByRole("button", { name: "Completadas" }));
+        fireEvent.click(screen.getByRole("button", { name: /Completadas/ }));
         expect(screen.queryByText("Tarea 1")).not.toBeInTheDocument();
         expect(screen.getByText("Tarea 2")).toBeInTheDocument();
     });
