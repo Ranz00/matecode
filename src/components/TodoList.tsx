@@ -78,7 +78,7 @@ export function TodoList() {
                 body: summary,
             });
             setEmailStatus("sent");
-            toast("Resumen enviado por email");
+            toast(`Resumen enviado a ${user.email}`);
         } catch {
             setEmailStatus("error");
             toast("No se pudo enviar, intentá de nuevo", "error");
