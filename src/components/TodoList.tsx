@@ -23,6 +23,8 @@ export function TodoList() {
         setActionLoading(true);
         try {
             await createTask(title, description, user.uid);
+        } catch {
+            toast("No se pudo agregar, intentá de nuevo", "error");
         } finally {
             setActionLoading(false);
         }
@@ -32,6 +34,8 @@ export function TodoList() {
         setActionLoading(true);
         try {
             await toggleTaskCompleted(taskId, completed);
+        } catch {
+            toast("No se pudo guardar, intentá de nuevo", "error");
         } finally {
             setActionLoading(false);
         }
@@ -41,6 +45,8 @@ export function TodoList() {
         setActionLoading(true);
         try {
             await updateTask(taskId, { title, description });
+        } catch {
+            toast("No se pudo guardar, intentá de nuevo", "error");
         } finally {
             setActionLoading(false);
         }
@@ -50,6 +56,8 @@ export function TodoList() {
         setActionLoading(true);
         try {
             await deleteTask(taskId);
+        } catch {
+            toast("No se pudo eliminar, intentá de nuevo", "error");
         } finally {
             setActionLoading(false);
         }
