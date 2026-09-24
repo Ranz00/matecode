@@ -15,7 +15,14 @@ export function validatePassword(password: string): string | null {
 }
 
 export function validateName(name: string): string | null {
-    if (name.trim().length < 2) return "Ingresá tu nombre (mínimo 2 caracteres)";
+    // Nombre de 2 a 30 letras, con espacios, guion o apóstrofe solo entre palabras
+    // Mínimo 2 para no excluir nombres reales cortos como "Li", "Jo" o "Al"
+    const trimmed = name.trim();
+    if (trimmed.length < 2) return "Ingresá tu nombre (mínimo 2 caracteres)";
+    if (trimmed.length > 30) return "Ingresá tu nombre (máximo 30 caracteres)";
+    if (!/^[\p{L}\p{M}]+(?:[ '\-][\p{L}\p{M}]+)*$/u.test(trimmed)) {
+        return "Solo letras, con un espacio, guion o apóstrofe entre palabras";
+    }
     return null;
 }
 

@@ -27,6 +27,29 @@ describe('validaciones con causa', () => {
     expect(validateName('a')).toBe('Ingresá tu nombre (mínimo 2 caracteres)')
   })
 
+  it('nombre largo pide máximo', () => {
+    expect(validateName('a'.repeat(31))).toBe(
+      'Ingresá tu nombre (máximo 30 caracteres)',
+    )
+  })
+
+  it('nombre con números explica la causa', () => {
+    expect(validateName('Juan123')).toBe(
+      'Solo letras, con un espacio, guion o apóstrofe entre palabras',
+    )
+  })
+
+  it('nombres compuestos válidos pasan', () => {
+    expect(validateName('María José')).toBeNull()
+    expect(validateName("O'Brien")).toBeNull()
+    expect(validateName('Jean-Pierre')).toBeNull()
+  })
+
+  it('separador colgando no pasa', () => {
+    expect(validateName("O'")).not.toBeNull()
+    expect(validateName('-Juan')).not.toBeNull()
+  })
+
   it('confirmación distinta avisa', () => {
     expect(validateConfirm('abc123', 'abc124')).toBe(
       'Las contraseñas no coinciden',
