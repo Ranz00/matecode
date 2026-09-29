@@ -30,6 +30,7 @@ export const createTask = async (
     description,
     completed: false,
     userId,
+    // Defaults de docs nuevos (los viejos los cubre el mapper)
     dueDate: values?.dueDate ?? null,
     priority: values?.priority ?? 'media',
     createdAt: serverTimestamp(),

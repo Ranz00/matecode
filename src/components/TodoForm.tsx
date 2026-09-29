@@ -32,6 +32,7 @@ export function TodoForm({ onAdd, loading }: Props) {
     onAdd({
       title: title.trim(),
       description: description.trim(),
+      // T00:00:00 evita que la fecha caiga un día antes por zona horaria
       dueDate: dueDate ? new Date(dueDate + 'T00:00:00') : null,
       priority,
     })

@@ -112,6 +112,7 @@ export function TodoList() {
   }
 
   // Orden: pendientes primero, luego prioridad y fecha
+  // Va antes del filtro porque visibleTasks lo consume
   const priorityWeight: Record<TaskPriority, number> = {
     alta: 0,
     media: 1,

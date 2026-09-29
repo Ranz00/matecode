@@ -36,6 +36,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const toast = useCallback((message: string, type: ToastType = "success") => {
         const id = nextId.current++;
         setToasts((current) => [...current, { id, message, type }]);
+        // Se oculta solo a los 4 segundos (o con click)
         setTimeout(() => dismiss(id), 4000);
     }, [dismiss]);
 

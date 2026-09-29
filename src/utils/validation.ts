@@ -37,6 +37,7 @@ export function validateConfirm(
 
 export function validateDueDate(value: string): string | null {
   if (!value) return null
+  // T00:00:00 evita que la fecha caiga un día antes por zona horaria
   const picked = new Date(value + 'T00:00:00')
   if (Number.isNaN(picked.getTime())) return 'Fecha inválida'
   const today = new Date()

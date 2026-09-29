@@ -28,6 +28,7 @@ export function TodoItem({
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState(task.title)
   const [description, setDescription] = useState(task.description)
+  // Vencida solo si tiene fecha pasada y sigue pendiente
   const todayStart = new Date()
   todayStart.setHours(0, 0, 0, 0)
   const overdue =
