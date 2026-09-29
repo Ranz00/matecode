@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:vercel": "vercel dev"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.1113.0",
@@ -32,6 +33,7 @@
     "oxlint": "^1.75.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
+    "vercel": "^59.26.0",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"
   }
