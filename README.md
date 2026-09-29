@@ -129,7 +129,7 @@ Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incl
 
 ## Uso de IA
 
-Desarrollo asistido por IA con criterio propio, combinando herramientas según la tarea: Antigravity (prototipado y correcciones guiadas por el instructor), OpenCode (implementación paso a paso con verificación por comandos) y Claude (revisiones, patrones y decisiones).
+Desarrollo asistido por IA con criterio propio, combinando herramientas: Antigravity (prototipado y correcciones guiadas por el instructor), OpenCode (implementación paso a paso con verificación por comandos) y Claude (revisiones, patrones y decisiones).
 
 Patrones que más rindieron:
 
