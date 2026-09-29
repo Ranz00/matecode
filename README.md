@@ -1,47 +1,71 @@
 # MateCode
 
-> **Rama principal:** `main` trae el MateCode renovado y completo. La entrega M4 original se conserva en el branch `matecode-legacy` (no es principal).
+> **Ramas:** `matecode` (principal, app actual) + `matecode-legacy` (versión anterior conservada).
 
-Aplicación de gestión de tareas construida como proyecto integrador del Módulo 4 de Henry.
+Gestor de tareas full-stack — proyecto de portfolio: React + TypeScript + Firebase Auth/Firestore + AWS SES vía serverless.
+
+> **⚠️ Importante — cómo funciona el email (AWS SES en sandbox)**
+>
+> **Proceso:** el botón arma el resumen con el estado vivo de tus tareas → `POST /api/sendEmail` → la Vercel Function valida el payload y llama a SES con credenciales solo-serverless → toast de éxito/error.
+>
+> **Destinatarios:** el email fijo de `AWS_SES_TO_EMAIL` y el email del usuario logueado. Motivo: el dueño recibe copia de cada resumen generado.
+>
+> **Pero sandbox:** sin dominio propio no hay production access. En sandbox SES **solo entrega entre identidades verificadas** (AWS Console → SES → Verified identities); si una no lo está, SES rechaza el envío **completo**.
+>
+> **Demora y spam (normal):** remitente nuevo sin SPF/DKIM → Gmail difiere hasta ~1h y clasifica como spam. Verificado con entregas reales.
+>
+> **Para desarrollo local:** completar las 11 vars del `.env.example` y verificar ambas direcciones en SES. Ante error, mirar el toast + Network (`POST /api/sendEmail`).
+
+> **Nota — `vercel.json` (configuración de deploy, no código)**
+>
+> **Por qué existe:** la SPA tiene una sola página real (`index.html`); el router finge las demás. `rewrites` declara que toda ruta que no sea `/api/*` sirva `index.html` para que el router decida. `functions/maxDuration` fija el timeout de la function en 10s.
+>
+> **Motivo probado:** sin `rewrites`, recargar o abrir directo `/tasks` en producción da 404 (en local no pasa porque Vite redirige solo). Verificado el 404 real y su corrección en prod.
+>
+> **Qué NO afecta:** ningún `.ts`/test, variables, Firebase ni el bundle. Quitarlo no rompe el build ni los tests — rompe refresh y links directos en prod, en silencio.
+>
+> **Cómo verificarlo:** deploy → abrir `/tasks` → F5 → debe cargar. Si da 404, falta este archivo.
 
 ## Descripción
 
-MateCode permite a los usuarios crear, editar, completar y eliminar tareas de forma persistente. Incluye autenticación con email y Google, sincronización en tiempo real vía Firestore, y envío de resúmenes por email a través de AWS SES.
+MateCode permite crear, editar, completar y eliminar tareas de forma persistente, con drag & drop manual, vencimientos y prioridades. Incluye autenticación con email y Google (con nombre visible), sincronización en tiempo real vía Firestore, y resúmenes por email vía AWS SES.
 
-Además de la consigna: tema claro y oscuro, validación con causa en formularios, ojo en contraseña, toasts de éxito y error, campo Nombre en registro, logo propio y filtros de tareas.
+Además: tema claro y oscuro persistente, validación con causa en formularios, ojo en contraseñas, toasts de éxito y error, logo propio bicolor, filtros con conteo, headers sticky y rebote de sesión.
 
 ## URL de producción
 
-[https://matecode-beige.vercel.app](https://matecode-beige.vercel.app)
+[https://matecode-epyon.vercel.app](https://matecode-epyon.vercel.app)
 
-Deploy actual de la entrega original. El redeploy del branch `matecode` va en el cierre, contra el repo nuevo.
+Deploy en Vercel desde `matecode` (también responde en `matecode-beige.vercel.app`).
 
 ## Arquitectura
 
+```
 MateCode/
 ├── api/
-│   └── sendEmail.ts # Vercel Function - AWS SES (en Vercel las functions viven en api/, no en functions/)
+│   └── sendEmail.ts        # Vercel Function: valida payload, exige env, envía al fijo + usuario (en Vercel las functions viven en api/, no en functions/)
 ├── src/
-│   ├── components/ # Logo, ThemeToggle, Toast, PasswordInput, TodoForm, TodoList, TodoItem, ProtectedRoute
+│   ├── components/         # AuthHeader, Logo, LogoLink, PasswordInput, ProtectedRoute, ThemeToggle, Toast, TodoForm, TodoItem, TodoList
 │   ├── features/
-│   │   └── auth/ # Authenticator (provider + acciones) y authErrors (catálogo con causa)
-│   ├── hooks/ # useAuth (contexto), useTasks (tiempo real), useTheme (claro/oscuro)
-│   ├── pages/ # LoginPage, RegisterPage, TasksPage
-│   ├── routes/ # AppRouter con rutas protegidas
-│   ├── services/ # firebase, taskService (CRUD + onSnapshot), emailService (llama a /api/sendEmail)
-│   ├── styles/ # theme.ts (clases Tailwind compartidas)
-│   ├── types/ # Task y TaskFormValues
-│   └── utils/ # validation (email, password, nombre, confirmación)
-├── tests/ # Unit + componentes + mocks (38 tests)
-├── firestore.rules # Espejo de las reglas activas en consola, como evidencia
-├── .env.example # Plantilla sin secretos
-├── vercel.json
+│   │   └── auth/           # Authenticator (provider + acciones) y authErrors (catálogo con causa)
+│   ├── hooks/              # useAuth (contexto), useTasks (tiempo real), useTheme (claro/oscuro)
+│   ├── pages/              # LoginPage, RegisterPage, TasksPage
+│   ├── routes/             # AppRouter con protegidas y rebote con sesión
+│   ├── services/           # firebase, taskService (CRUD + onSnapshot + batch de orden), emailService (llama a /api/sendEmail)
+│   ├── styles/             # theme.ts (clases Tailwind compartidas)
+│   ├── types/              # Task (con dueDate, priority, order), TaskPriority, TaskFormValues
+│   └── utils/              # validation (con causa) y order (merge de arrastre testeable)
+├── tests/                  # AuthRedirect, emailService, errors, order, PasswordInput, ThemeToggle, Toast, TodoForm, TodoItem, TodoList, taskService, validation + setup (54 tests)
+├── firestore.rules         # Espejo de las reglas activas en consola, como evidencia
+├── .env.example            # Plantilla sin secretos (11 vars)
+├── vercel.json             # Rewrites SPA + timeout de function
 ├── vitest.config.ts
-└── package.json
+└── package.json            # pnpm; dev, build, test, lint, preview y dev:vercel
+```
 
 ## Tecnologías
 
-- **Frontend:** React 19, TypeScript, React Router v7, Tailwind v4
+- **Frontend:** React 19, TypeScript, React Router v7, Tailwind v4, dnd-kit (arrastre)
 - **Backend:** Firebase Auth + Firestore
 - **Email:** AWS SES vía Vercel Functions
 - **Testing:** Vitest + React Testing Library + jest-dom
@@ -49,67 +73,36 @@ MateCode/
 
 ## Variables de entorno
 
-Copiar `.env.example` a `.env` y completar:
+Copiar `.env.example` a `.env` y completar (11 vars, sin valores reales en el repo):
 
-**Frontend** (prefijo `VITE_`, van al bundle, la seguridad real son las rules):
+**Frontend** (prefijo `VITE_`, van al bundle; la seguridad real son las rules): `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`.
 
-| Variable                            | Descripción                |
-| ----------------------------------- | -------------------------- |
-| `VITE_FIREBASE_API_KEY`             | API Key de Firebase        |
-| `VITE_FIREBASE_AUTH_DOMAIN`         | Auth Domain de Firebase    |
-| `VITE_FIREBASE_PROJECT_ID`          | Project ID de Firebase     |
-| `VITE_FIREBASE_STORAGE_BUCKET`      | Storage Bucket de Firebase |
-| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Messaging Sender ID        |
-| `VITE_FIREBASE_APP_ID`              | App ID de Firebase         |
-
-**Serverless** (sin prefijo, solo en Vercel Settings → Environment Variables, nunca en el frontend):
-
-| Variable                | Descripción                       |
-| ----------------------- | --------------------------------- |
-| `AWS_ACCESS_KEY_ID`     | Access Key de IAM                 |
-| `AWS_SECRET_ACCESS_KEY` | Secret Key de IAM                 |
-| `AWS_REGION`            | Región de AWS SES                 |
-| `AWS_SES_SENDER`        | Email remitente verificado en SES |
+**Serverless** (sin prefijo, solo en Vercel Settings → Environment Variables, nunca en el frontend): `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_SES_TO_EMAIL`, `AWS_SES_SENDER`.
 
 ## Instalación
 
 ```bash
 git clone https://github.com/Ranz00/matecode.git
 cd matecode
-git checkout matecode
 pnpm install
 cp .env.example .env
 pnpm dev
 ```
 
-Scripts:
-
-```bash
-pnpm dev       # Desarrollo local
-pnpm build     # Build de producción (tsc + vite)
-pnpm test      # Ejecutar tests
-pnpm lint      # Linting con oxlint
-```
+Scripts: `pnpm dev` (Vite) · `pnpm dev:vercel` (frontend + function en local, requiere `vercel login` y link) · `pnpm build` (`tsc` + vite, incluye tests en el tipado) · `pnpm test` · `pnpm lint`.
 
 ## Firestore Security Rules
 
-Evidencia en `firestore.rules`, espejo de lo activo en consola. Denegación por defecto; en `tasks`:
+Evidencia en `firestore.rules`, espejo de lo activo en consola. Denegación por defecto; en `tasks`: lectura y borrado solo propietario, creación con forma válida, edición con `userId` inmutable y forma válida (`title`, `description`, `completed`, `userId`, `priority`, `dueDate` y `order` opcionales).
 
-- `get/list`: solo el propietario (`isOwnerExisting`)
-- `create`: propietario entrante + forma válida (`isOwnerIncoming` + `hasValidShape`)
-- `update`: propietario + `userId` inmutable + forma válida
-- `delete`: solo el propietario
-
-Índice compuesto activo: `tasks(userId ASC, createdAt DESC)`.
+Índice compuesto activo: `tasks(userId ASC, createdAt DESC)`. El orden manual y los filtros se resuelven en cliente, sin índices extra.
 
 ## Flujo de email
 
-1. El usuario hace click en "Enviar resumen por email"
-2. El frontend llama a `POST /api/sendEmail` (Vercel Function), nunca a AWS directo
-3. La función valida el payload y usa AWS SES con credenciales serverless
-4. La UI muestra toast de éxito o error; el botón refleja el envío en curso
-
-Nota: la cuenta SES está en sandbox (solo envía a emails verificados), verificado con test real recibido.
+1. El usuario hace click en "Enviar resumen por email".
+2. El frontend llama a `POST /api/sendEmail` (Vercel Function), nunca a AWS directo.
+3. La función exige `AWS_SES_TO_EMAIL` + `AWS_SES_SENDER` (400 si faltan), valida el payload y envía a ambas direcciones con credenciales serverless.
+4. La UI muestra toast de éxito (con destinatario) o error; el botón refleja el envío en curso.
 
 ## Testing
 
@@ -117,40 +110,32 @@ Nota: la cuenta SES está en sandbox (solo envía a emails verificados), verific
 pnpm test
 ```
 
-38 tests cubriendo:
+54 tests: errores Firebase (11 + genérico), validaciones (email, password, nombre 2–30 con regex, confirmación, fechas), taskService (exports + orden en batch), emailService (delegación propia + error-path, nunca AWS directo), orden manual (`mergeOrder`: mueve, conserva ocultos, casos inválidos), TodoForm (render + fecha/prioridad), TodoItem (render, checkbox, eliminar, vencida/prioridad), TodoList (vacío, tareas, email, filtros con conteo, toggle fallido, orden), PasswordInput (ojo + error), ThemeToggle (alternancia + persistencia), Toast (mensaje), AuthRedirect (rebote con sesión en login y registro).
 
-- `errors` — catálogo completo de códigos Firebase (11 + genérico)
-- `validation` — email, password, nombre y confirmación con causa
-- `taskService` — exports y tipos
-- `emailService` — delegación a la function propia y error-path (nunca AWS directo)
-- `TodoForm` — renderizado del formulario
-- `TodoItem` — renderizado, checkbox, eliminación
-- `TodoList` — vacío, con tareas, botón email y filtros (con mocks de hooks)
-- `PasswordInput` — ojo mostrar/ocultar y error visible
-- `ThemeToggle` — alternancia y persistencia del tema
-- `Toast` — mensaje disparado visible
-
-Servicios externos mockeados: los tests no hacen llamadas reales.
+Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incluye `tests/`, así que `tsc` también los tipa.
 
 ## Decisiones de arquitectura
 
-- **Auth con contexto único:** un solo `onAuthStateChanged` en el provider `Authenticator`. `useAuth` consume el contexto con la misma firma. Las acciones (`registerWithEmail`, `loginWithEmail`, `loginWithGoogle`, `logoutUser`) quedan como funciones puras.
-- **Timestamp → Date:** `taskService` convierte los Timestamp de Firestore a Date nativos dentro del `onSnapshot`, los componentes trabajan con tipos nativos.
-- **Service layer:** `firebase`, `taskService`, `emailService` como capas finas. Los componentes describen UI, no obtienen datos.
-- **Nombre visible:** el registro guarda `displayName` con `updateProfile`; Google ya lo trae. El header muestra nombre con fallback a email.
-- **Tema por clase `.dark`:** variante custom de Tailwind v4 con persistencia en `localStorage` y respeto a la preferencia del sistema.
-- **`api/` y no `functions/`:** Vercel descubre las functions en `api/`. Se documenta para no confundir con la estructura sugerida.
-- **Rewrites SPA en Vercel:** toda ruta que no sea `/api/*` cae en `index.html` para que refresh y URLs directas no den 404. En local Vite ya lo hace solo; en prod hay que declararlo en `vercel.json`.
+- **Auth con contexto único:** un solo `onAuthStateChanged` en el provider `Authenticator`. `useAuth` consume el contexto con la misma firma. Acciones puras (`registerWithEmail`, `loginWithEmail`, `loginWithGoogle`, `logoutUser`).
+- **Rebote con sesión:** login y registro redirigen a `/tasks` si ya hay sesión; el logo lleva a `/login` o `/tasks` según estado.
+- **Timestamp → Date:** el mapper convierte a nativos con fallback para docs viejos (`null`/`media`/fecha de creación), sin migración.
+- **Orden con completadas hundidas:** las tickeadas siempre abajo; el arrastre reordena dentro del mismo estado (cruzarlo rebota por diseño). `order` negativo en nuevos (`-Date.now()`) para que lo nuevo quede primero.
+- **Drag & drop contenido:** asa dedicada (no roba clicks), sensor con distancia 8px, batch atómico al soltar, `mergeOrder` puro y testeado; táctil limitado al asa.
+- **Service layer:** capas finas; los componentes describen UI. `emailService` nunca toca AWS.
+- **Nombre visible:** `displayName` con `updateProfile`; header con fallback a email.
+- **Tema por clase `.dark`:** variante custom Tailwind v4 + `localStorage` + preferencia del sistema.
+- **`api/` y no `functions/`:** Vercel descubre las functions en `api/`.
+- **Validación con causa:** cada freno explica el motivo; el error se limpia solo al volver válido el valor.
 
 ## Uso de IA
 
-Desarrollado con OpenCode (plan + build) y Claude en VSCode como apoyo, priorizando comprensión del código propio.
+Desarrollo asistido por IA con criterio propio, combinando herramientas según la tarea: Antigravity (prototipado y correcciones guiadas por el instructor), OpenCode (implementación paso a paso con verificación por comandos) y Claude (revisiones, patrones y decisiones).
 
 Patrones que más rindieron:
 
-- **Pedir pasos antes que código:** planificar la edición archivo por archivo evitó reescrituras y redujo el diff.
-- **Comparar con docs y clases:** cada pieza de las clases 8–11 se leyó, se adaptó a las convenciones del repo y solo se trajo lo necesario (contexto de auth, catálogo de errores, migración Firestore, form SES).
+- **Pedir pasos antes que código:** planificar archivo por archivo evitó reescrituras y redujo el diff.
+- **Ramas descartables para lo riesgoso:** vencimientos y drag&drop se probaron en `exp/plus`; a principal solo llegó lo verificado en verde.
+- **Verificar antes de afirmar:** índice Enabled, test SES recibido, `.env` jamás commiteado y 18→54 tests se comprobaron con comandos, no de memoria.
 - **Tests para validar, no para cubrir:** cada incremento cerró con `tsc` en 0 y suite en verde antes de commitear; un test fallido frenó un commit y se corrigió con fix dedicado.
-- **Verificar antes de afirmar:** índice Enabled, test SES recibido, `.env` jamás commiteado y 18→38 tests se comprobaron con comandos, no de memoria.
 
 Lo que no delegué a la IA: credenciales y secretos (siempre manuales), decisiones de deploy y renombres en GitHub/Vercel (clicks propios), y el criterio final de qué entraba a cada commit.
