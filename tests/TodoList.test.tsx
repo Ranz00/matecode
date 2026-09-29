@@ -95,6 +95,21 @@ describe("TodoList", () => {
         expect(screen.getByText("Tarea 2")).toBeInTheDocument();
     });
 
+    it("ordena por prioridad con pendientes primero", () => {
+        mockUseTasks.mockReturnValue({
+            tasks: [
+                { id: "1", title: "Tarea baja", description: "", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "baja" },
+                { id: "2", title: "Tarea alta", description: "", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "alta" },
+                { id: "3", title: "Tarea hecha", description: "", completed: true, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "alta" },
+            ],
+            loading: false,
+            error: null,
+        });
+        render(<ToastProvider><TodoList /></ToastProvider>);
+        const titles = screen.getAllByText(/Tarea (alta|baja|hecha)/).map((e) => e.textContent);
+        expect(titles).toEqual(["Tarea alta", "Tarea baja", "Tarea hecha"]);
+    });
+
     it("muestra error si el toggle falla", async () => {
         mockUseTasks.mockReturnValue({
             tasks: [

@@ -85,4 +85,22 @@ describe('TodoItem', () => {
     fireEvent.click(screen.getByText('Eliminar'))
     expect(onDelete).toHaveBeenCalledWith('1')
   })
+
+  it('muestra vencida y prioridad', () => {
+    render(
+      <TodoItem
+        task={{
+          ...mockTask,
+          dueDate: new Date('2000-01-01T00:00:00'),
+          priority: 'alta' as const,
+        }}
+        onToggle={() => {}}
+        onUpdate={() => {}}
+        onDelete={() => {}}
+        loading={false}
+      />,
+    )
+    expect(screen.getByText(/Vencida/)).toBeInTheDocument()
+    expect(screen.getByText('alta')).toBeInTheDocument()
+  })
 })

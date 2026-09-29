@@ -13,7 +13,7 @@ import { TodoForm } from './TodoForm'
 import { TodoItem } from './TodoItem'
 import { useToast } from './Toast'
 import { errorClass } from '../styles/theme'
-import type { TaskFormValues } from '../types'
+import type { TaskFormValues, TaskPriority } from '../types'
 
 export function TodoList() {
   const { user } = useAuth()
@@ -111,8 +111,24 @@ export function TodoList() {
     return <div className={errorClass}>{error}</div>
   }
 
+  // Orden: pendientes primero, luego prioridad y fecha
+  const priorityWeight: Record<TaskPriority, number> = {
+    alta: 0,
+    media: 1,
+    baja: 2,
+  }
+  const orderedTasks = [...tasks].sort((a, b) => {
+    if (a.completed !== b.completed) return a.completed ? 1 : -1
+    if (priorityWeight[a.priority] !== priorityWeight[b.priority])
+      return priorityWeight[a.priority] - priorityWeight[b.priority]
+    if (a.dueDate && b.dueDate) return a.dueDate.getTime() - b.dueDate.getTime()
+    if (a.dueDate) return -1
+    if (b.dueDate) return 1
+    return b.createdAt.getTime() - a.createdAt.getTime()
+  })
+
   // Filtro de vista, no toca los datos
-  const visibleTasks = tasks.filter(
+  const visibleTasks = orderedTasks.filter(
     (t) => filter === 'all' || (filter === 'done') === t.completed,
   )
   const pendingCount = tasks.filter((t) => !t.completed).length
