@@ -1,13 +1,13 @@
 {
-    "functions": {
-        "api/sendEmail.ts": {
-            "maxDuration": 10
-        }
-    },
-    "rewrites": [
-        {
-            "source": "/((?!api/).*)",
-            "destination": "/index.html"
-        }
-    ]
+  "functions": {
+    "api/sendEmail.ts": {
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/((?!/api/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
