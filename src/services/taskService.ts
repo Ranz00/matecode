@@ -7,6 +7,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  writeBatch,
   onSnapshot,
   query,
   where,
@@ -23,7 +24,7 @@ export const createTask = async (
   title: string,
   description: string,
   userId: string,
-  values?: { dueDate?: Date | null; priority?: TaskPriority },
+  values?: { dueDate?: Date | null; priority?: TaskPriority; order?: number },
 ) => {
   return addDoc(collection(db, 'tasks'), {
     title,
@@ -33,6 +34,8 @@ export const createTask = async (
     // Defaults de docs nuevos (los viejos los cubre el mapper)
     dueDate: values?.dueDate ?? null,
     priority: values?.priority ?? 'media',
+    // Negativo para que lo nuevo quede primero (orden ascendente)
+    order: values?.order ?? -Date.now(),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   })
@@ -42,7 +45,7 @@ export const createTask = async (
 export const updateTask = async (
   taskId: string,
   updates: Partial<
-    Pick<Task, 'title' | 'description' | 'completed' | 'dueDate' | 'priority'>
+    Pick<Task, 'title' | 'description' | 'completed' | 'dueDate' | 'priority' | 'order'>
   >,
 ) => {
   const taskRef = doc(db, 'tasks', taskId)
@@ -56,6 +59,18 @@ export const updateTask = async (
 export const deleteTask = async (taskId: string) => {
   const taskRef = doc(db, 'tasks', taskId)
   return deleteDoc(taskRef)
+}
+
+// Guarda el orden manual en un solo batch (una escritura atómica)
+export const persistTaskOrder = async (ids: string[]) => {
+  const batch = writeBatch(db)
+  ids.forEach((taskId, order) => {
+    batch.update(doc(db, 'tasks', taskId), {
+      order,
+      updatedAt: serverTimestamp(),
+    })
+  })
+  return batch.commit()
 }
 
 // Toggle completada
@@ -76,9 +91,13 @@ const mapTask = (docSnap: DocumentData): Task => {
     description: data.description,
     completed: data.completed,
     userId: data.userId,
-    // Docs viejos sin estos campos quedan en null/media, sin migración
+    // Docs viejos sin estos campos quedan en null/media/fecha, sin migración
     dueDate: data.dueDate?.toDate?.() ?? null,
     priority: data.priority ?? 'media',
+    order:
+      typeof data.order === 'number'
+        ? data.order
+        : (data.createdAt?.toDate?.()?.getTime() ?? 0),
     createdAt: data.createdAt?.toDate?.() ?? new Date(),
     updatedAt: data.updatedAt?.toDate?.() ?? new Date(),
   }

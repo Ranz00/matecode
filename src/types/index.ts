@@ -12,6 +12,8 @@ export interface Task {
   updatedAt: Date
   dueDate: Date | null
   priority: TaskPriority
+  // Posición manual para arrastrar (viejos usan fecha de creación)
+  order: number
 }
 
 // Valores del formulario de tareas, un solo objeto

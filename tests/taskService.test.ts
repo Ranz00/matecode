@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createTask, updateTask, deleteTask, toggleTaskCompleted, subscribeToTasks } from "../src/services/taskService";
+import { createTask, updateTask, deleteTask, toggleTaskCompleted, subscribeToTasks, persistTaskOrder } from "../src/services/taskService";
 
 describe("taskService", () => {
     it("createTask es una funcion", () => {
@@ -16,6 +16,10 @@ describe("taskService", () => {
 
     it("toggleTaskCompleted es una funcion", () => {
         expect(typeof toggleTaskCompleted).toBe("function");
+    });
+
+    it("persistTaskOrder es una funcion", () => {
+        expect(typeof persistTaskOrder).toBe("function");
     });
 
     it("subscribeToTasks es una funcion", () => {

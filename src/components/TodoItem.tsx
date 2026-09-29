@@ -2,6 +2,9 @@
 
 import { useState, type FormEvent } from 'react'
 import type { Task } from '../types'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { FiMove } from 'react-icons/fi'
 import {
   formClass,
   inputClass,
@@ -33,6 +36,10 @@ export function TodoItem({
   todayStart.setHours(0, 0, 0, 0)
   const overdue =
     !task.completed && task.dueDate !== null && task.dueDate < todayStart
+
+  // Arrastre solo desde el asa: no roba clicks al checkbox ni a los botones
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: task.id })
 
   const handleSave = (e: FormEvent) => {
     e.preventDefault()
@@ -82,9 +89,20 @@ export function TodoItem({
 
   return (
     <div
-      className={`mb-3 rounded-2xl border border-slate-200 border-l-4 bg-white p-4 shadow transition hover:-translate-y-0.5 dark:border-white/10 dark:bg-slate-900 ${task.completed ? 'border-l-emerald-500/60' : 'border-l-violet-500'}`}
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      className={`mb-3 rounded-2xl border border-slate-200 border-l-4 bg-white p-4 shadow transition hover:-translate-y-0.5 dark:border-white/10 dark:bg-slate-900 ${task.completed ? 'border-l-emerald-500/60' : 'border-l-violet-500'}${isDragging ? ' opacity-50' : ''}`}
     >
       <div className="flex items-center gap-3">
+        <button
+          type="button"
+          aria-label="Arrastrar tarea"
+          className="cursor-grab touch-none text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+          {...attributes}
+          {...listeners}
+        >
+          <FiMove size={16} aria-hidden="true" />
+        </button>
         <input
           type="checkbox"
           checked={task.completed}

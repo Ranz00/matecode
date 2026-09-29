@@ -29,7 +29,8 @@ service cloud.firestore {
         && data.completed is bool
         && data.userId is string
         && data.priority is string
-        && (data.dueDate == null || data.dueDate is timestamp);
+        && (data.dueDate == null || data.dueDate is timestamp)
+        && (data.order == null || data.order is number);
     }
 
     match /tasks/{taskId} {

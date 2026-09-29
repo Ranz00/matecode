@@ -5,15 +5,29 @@ import {
   toggleTaskCompleted,
   updateTask,
   deleteTask,
+  persistTaskOrder,
 } from '../services/taskService'
 import { sendEmail } from '../services/emailService'
 import { useState } from 'react'
 import { FiSend, FiClipboard } from 'react-icons/fi'
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { TodoForm } from './TodoForm'
 import { TodoItem } from './TodoItem'
 import { useToast } from './Toast'
 import { errorClass } from '../styles/theme'
-import type { TaskFormValues, TaskPriority } from '../types'
+import { mergeOrder } from '../utils/order'
+import type { TaskFormValues } from '../types'
 
 export function TodoList() {
   const { user } = useAuth()
@@ -24,6 +38,11 @@ export function TodoList() {
     'idle' | 'sending' | 'sent' | 'error'
   >('idle')
   const [filter, setFilter] = useState<'all' | 'pending' | 'done'>('all')
+
+  // Distancia mínima: evita que un click se interprete como arrastre
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  )
 
   const handleAdd = async ({
     title,
@@ -79,6 +98,25 @@ export function TodoList() {
     }
   }
 
+  // Suelta: reordena lo visible, conserva ocultos y persiste el orden
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over) return
+    const visibleIds = visibleTasks.map((t) => t.id)
+    const merged = mergeOrder(
+      orderedTasks,
+      visibleIds,
+      String(active.id),
+      String(over.id),
+    )
+    if (merged === orderedTasks) return
+    try {
+      await persistTaskOrder(merged.map((t) => t.id))
+    } catch {
+      toast('No se pudo guardar el orden, intentá de nuevo', 'error')
+    }
+  }
+
   // Genera resumen de tareas y lo envía por email via SES
   const handleSendSummary = async () => {
     if (!user || !user.email) return
@@ -111,21 +149,10 @@ export function TodoList() {
     return <div className={errorClass}>{error}</div>
   }
 
-  // Orden: pendientes primero, luego prioridad y fecha
-  // Va antes del filtro porque visibleTasks lo consume
-  const priorityWeight: Record<TaskPriority, number> = {
-    alta: 0,
-    media: 1,
-    baja: 2,
-  }
+  // Orden manual (tras hundir completadas); prioridad y fecha se muestran, no ordenan
   const orderedTasks = [...tasks].sort((a, b) => {
     if (a.completed !== b.completed) return a.completed ? 1 : -1
-    if (priorityWeight[a.priority] !== priorityWeight[b.priority])
-      return priorityWeight[a.priority] - priorityWeight[b.priority]
-    if (a.dueDate && b.dueDate) return a.dueDate.getTime() - b.dueDate.getTime()
-    if (a.dueDate) return -1
-    if (b.dueDate) return 1
-    return b.createdAt.getTime() - a.createdAt.getTime()
+    return (a.order ?? 0) - (b.order ?? 0)
   })
 
   // Filtro de vista, no toca los datos
@@ -182,16 +209,27 @@ export function TodoList() {
           <p>No tenés tareas todavía. ¡Agregá una!</p>
         </div>
       ) : (
-        visibleTasks.map((task) => (
-          <TodoItem
-            key={task.id}
-            task={task}
-            onToggle={handleToggle}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-            loading={actionLoading}
-          />
-        ))
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={visibleTasks.map((t) => t.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {visibleTasks.map((task) => (
+              <TodoItem
+                key={task.id}
+                task={task}
+                onToggle={handleToggle}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+                loading={actionLoading}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   )

@@ -24,6 +24,7 @@ vi.mock("../src/services/taskService", () => ({
     toggleTaskCompleted: vi.fn(),
     updateTask: vi.fn(),
     deleteTask: vi.fn(),
+    persistTaskOrder: vi.fn(),
 }));
 
 describe("TodoList", () => {
@@ -98,9 +99,9 @@ describe("TodoList", () => {
     it("ordena por prioridad con pendientes primero", () => {
         mockUseTasks.mockReturnValue({
             tasks: [
-                { id: "1", title: "Tarea baja", description: "", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "baja" },
-                { id: "2", title: "Tarea alta", description: "", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "alta" },
-                { id: "3", title: "Tarea hecha", description: "", completed: true, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "alta" },
+                { id: "1", title: "Tarea baja", description: "", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "baja", order: 2 },
+                { id: "2", title: "Tarea alta", description: "", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "alta", order: 1 },
+                { id: "3", title: "Tarea hecha", description: "", completed: true, userId: "user1", createdAt: new Date(), updatedAt: new Date(), dueDate: null, priority: "alta", order: 0 },
             ],
             loading: false,
             error: null,
