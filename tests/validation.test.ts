@@ -70,13 +70,3 @@ it('fecha vacía y futura pasan', () => {
   expect(validateDueDate('')).toBeNull()
   expect(validateDueDate('2099-12-31')).toBeNull()
 })
-
-export function validateDueDate(value: string): string | null {
-  if (!value) return null
-  const picked = new Date(value + 'T00:00:00')
-  if (Number.isNaN(picked.getTime())) return 'Fecha inválida'
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  if (picked < today) return 'La fecha no puede ser pasada'
-  return null
-}

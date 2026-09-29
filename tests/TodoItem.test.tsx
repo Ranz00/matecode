@@ -13,6 +13,7 @@ const mockTask: Task = {
   updatedAt: new Date(),
   dueDate: null,
   priority: 'media',
+  order: 0,
 }
 
 describe('TodoItem', () => {
