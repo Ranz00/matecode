@@ -28,9 +28,11 @@ Gestor de tareas full-stack — proyecto de portfolio: React + TypeScript + Fire
 >
 > **Cómo verificarlo:** deploy → abrir `/tasks` → F5 → debe cargar. Si da 404, falta este archivo.
 
-> **Importante — de quién son las credenciales en cada entorno**
+> **Importante — credenciales y cuenta de Vercel (configuración del proyecto)**
 >
-> **Este deploy corre con las del dueño** (env de Vercel): usarlo no te pide nada. Lo único acotado es recibir emails en direcciones no verificadas (ver Obs de email arriba) — límite de la cuenta sandbox, no del código.
+> **Solo vos ves:** Settings → Environment Variables (AWS keys, remitente, copia fija), integraciones, tokens y logs con detalle. Viven en tu cuenta; clonar el repo no copia ni expone nada (verificado: `.env` jamás commiteado, errores 500 genéricos sin filtrar).
+>
+> **Lo que sí ve el visitante:** dominio de producción, rama que deploya (`matecode`) y acceso sin login. Eso está configurado y probado en epyon.
 >
 > **Tu copia corre 100% con las tuyas** (`.env` propio + tu Firebase/AWS + tu Vercel si deployás): nada del dueño interfiere — ni recibe tus datos, ni toca tus envíos, ni ve tus errores.
 
