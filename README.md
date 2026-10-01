@@ -140,4 +140,9 @@ Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incl
 
 ## Uso de IA
 
-Utilización de IA como auxiliar de velocidad, no de criterio: Antigravity (prototipado con el instructor), OpenCode (implementación guiada) y Claude (revisiones). El código lo escribí, audité y commiteé yo: arquitectura por capas, decisiones (contexto único de auth, fail-fast con códigos blancos, orden manual con hundimiento, rewrites SPA), bugs corregidos y cambios aplicados, todo bajo criterio propio y verificado con comandos (`tsc` 0 + suite + e2e manual) antes de cada commit. Credenciales, deploys, renombres y criterio final: manuales.
+IA como auxiliar de velocidad, no de criterio: Antigravity (prototipado con el instructor), OpenCode (implementación guiada) y Claude (revisiones).
+
+- Arquitectura por capas y decisiones técnicas propias: contexto único de auth, fail-fast con códigos blancos, orden manual con hundimiento, rewrites SPA.
+- Bugs corregidos y cambios aplicados bajo criterio propio.
+- Verificación con comandos antes de cada commit: `tsc` 0 + suite + e2e manual.
+- Credenciales, deploys, renombres y criterio final de cada commit: manuales.
