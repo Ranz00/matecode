@@ -132,13 +132,4 @@ Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incl
 
 ## Uso de IA
 
-Desarrollo asistido por IA con criterio propio, combinando herramientas: Antigravity (prototipado y correcciones guiadas por el instructor), OpenCode (implementación paso a paso con verificación por comandos) y Claude (revisiones, patrones y decisiones).
-
-Patrones que más rindieron:
-
-- **Pedir pasos antes que código:** planificar archivo por archivo evitó reescrituras y redujo el diff.
-- **Ramas descartables para lo riesgoso:** vencimientos y drag&drop se probaron en `exp/plus`; a principal solo llegó lo verificado en verde.
-- **Verificar antes de afirmar:** índice Enabled, test SES recibido, `.env` jamás commiteado y 18→56 tests se comprobaron con comandos, no de memoria.
-- **Tests para validar, no para cubrir:** cada incremento cerró con `tsc` en 0 y suite en verde antes de commitear; un test fallido frenó un commit y se corrigió con fix dedicado.
-
-Lo que no delegué a la IA: credenciales y secretos (siempre manuales), decisiones de deploy y renombres en GitHub/Vercel (clicks propios), y el criterio final de qué entraba a cada commit.
+Usé IA como herramienta de velocidad, no de criterio: Antigravity (prototipado con el instructor), OpenCode (implementación guiada) y Claude (revisiones). La arquitectura, las decisiones (contexto único, fail-fast, orden manual, rewrites) y los criterios de verde fueron míos; verifiqué cada salida con comandos antes de commitear. Credenciales, deploys y renombres, siempre manuales.
