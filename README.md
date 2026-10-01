@@ -28,6 +28,12 @@ Gestor de tareas full-stack — proyecto de portfolio: React + TypeScript + Fire
 >
 > **Cómo verificarlo:** deploy → abrir `/tasks` → F5 → debe cargar. Si da 404, falta este archivo.
 
+> **Importante — de quién son las credenciales en cada entorno**
+>
+> **Este deploy corre con las del dueño** (env de Vercel): usarlo no te pide nada. Lo único acotado es recibir emails en direcciones no verificadas (ver Obs de email arriba) — límite de la cuenta sandbox, no del código.
+>
+> **Tu copia corre 100% con las tuyas** (`.env` propio + tu Firebase/AWS + tu Vercel si deployás): nada del dueño interfiere — ni recibe tus datos, ni toca tus envíos, ni ve tus errores.
+
 ## Descripción
 
 MateCode permite crear, editar, completar y eliminar tareas de forma persistente, con drag & drop manual, vencimientos y prioridades. Incluye autenticación con email y Google (con nombre visible), sincronización en tiempo real vía Firestore, y resúmenes por email vía AWS SES.
@@ -132,4 +138,4 @@ Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incl
 
 ## Uso de IA
 
-Usé IA como herramienta de velocidad, no de criterio: Antigravity (prototipado con el instructor), OpenCode (implementación guiada) y Claude (revisiones). La arquitectura, las decisiones (contexto único, fail-fast, orden manual, rewrites) y los criterios de verde fueron míos; verifiqué cada salida con comandos antes de commitear. Credenciales, deploys y renombres, siempre manuales.
+Utilización de IA como herramienta de velocidad, no de criterio: Antigravity (prototipado con el instructor), OpenCode (implementación guiada con verificación por comandos) y Claude (revisiones). Arquitectura por capas, decisiones (contexto único de auth, fail-fast con códigos blancos, orden manual con hundimiento, rewrites SPA) y criterios de verde (`tsc` 0 + suite + e2e manual) definidos con criterio propio; cada salida verificada con comandos antes de commitear. Credenciales, deploys, renombres y criterio final de cada commit: manuales.
