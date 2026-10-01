@@ -15,6 +15,8 @@ Gestor de tareas full-stack — proyecto de portfolio: React + TypeScript + Fire
 > **Demora y spam (normal):** remitente nuevo sin SPF/DKIM → Gmail difiere hasta ~1h y clasifica como spam. Verificado con entregas reales.
 >
 > **Para desarrollo local:** completar las 11 vars del `.env.example` y verificar ambas direcciones en SES. Ante error, mirar el toast + Network (`POST /api/sendEmail`).
+>
+> Si tu dirección no está verificada, la propia app te lo dice en el toast de error — no hace falta adivinar qué pasó.
 
 > **Nota — `vercel.json` (configuración de deploy, no código)**
 >
@@ -55,7 +57,7 @@ MateCode/
 │   ├── styles/             # theme.ts (clases Tailwind compartidas)
 │   ├── types/              # Task (con dueDate, priority, order), TaskPriority, TaskFormValues
 │   └── utils/              # validation (con causa) y order (merge de arrastre testeable)
-├── tests/                  # AuthRedirect, emailService, errors, order, PasswordInput, ThemeToggle, Toast, TodoForm, TodoItem, TodoList, taskService, validation + setup (54 tests)
+├── tests/                  # AuthRedirect, emailService, errors, order, PasswordInput, ThemeToggle, Toast, TodoForm, TodoItem, TodoList, taskService, validation + setup (56 tests)
 ├── firestore.rules         # Espejo de las reglas activas en consola, como evidencia
 ├── .env.example            # Plantilla sin secretos (11 vars)
 ├── vercel.json             # Rewrites SPA + timeout de function
@@ -102,7 +104,7 @@ Evidencia en `firestore.rules`, espejo de lo activo en consola. Denegación por 
 1. El usuario hace click en "Enviar resumen por email".
 2. El frontend llama a `POST /api/sendEmail` (Vercel Function), nunca a AWS directo.
 3. La función exige `AWS_SES_TO_EMAIL` + `AWS_SES_SENDER` (400 si faltan), valida el payload y envía a ambas direcciones con credenciales serverless.
-4. La UI muestra toast de éxito (con destinatario) o error; el botón refleja el envío en curso.
+4. La UI muestra toast de éxito (con destinatario) o error específico (dirección no verificada con puntero al README, u otro); el botón refleja el envío en curso.
 
 ## Testing
 
@@ -110,7 +112,7 @@ Evidencia en `firestore.rules`, espejo de lo activo en consola. Denegación por 
 pnpm test
 ```
 
-54 tests: errores Firebase (11 + genérico), validaciones (email, password, nombre 2–30 con regex, confirmación, fechas), taskService (exports + orden en batch), emailService (delegación propia + error-path, nunca AWS directo), orden manual (`mergeOrder`: mueve, conserva ocultos, casos inválidos), TodoForm (render + fecha/prioridad), TodoItem (render, checkbox, eliminar, vencida/prioridad), TodoList (vacío, tareas, email, filtros con conteo, toggle fallido, orden), PasswordInput (ojo + error), ThemeToggle (alternancia + persistencia), Toast (mensaje), AuthRedirect (rebote con sesión en login y registro).
+56 tests: errores Firebase (11 + genérico), validaciones (email, password, nombre 2–30 con regex, confirmación, fechas), taskService (exports + orden en batch), emailService (delegación propia + error-path + caso no-verificado, nunca AWS directo), orden manual (`mergeOrder`: mueve, conserva ocultos, casos inválidos), TodoForm (render + fecha/prioridad), TodoItem (render, checkbox, eliminar, vencida/prioridad), TodoList (vacío, tareas, email, filtros con conteo, toggle fallido, orden, toast específico), PasswordInput (ojo + error), ThemeToggle (alternancia + persistencia), Toast (mensaje), AuthRedirect (rebote con sesión en login y registro).
 
 Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incluye `tests/`, así que `tsc` también los tipa.
 
@@ -122,6 +124,7 @@ Servicios externos mockeados: ningún test hace llamadas reales. `tsconfig` incl
 - **Orden con completadas hundidas:** las tickeadas siempre abajo; el arrastre reordena dentro del mismo estado (cruzarlo rebota por diseño). `order` negativo en nuevos (`-Date.now()`) para que lo nuevo quede primero.
 - **Drag & drop contenido:** asa dedicada (no roba clicks), sensor con distancia 8px, batch atómico al soltar, `mergeOrder` puro y testeado; táctil limitado al asa.
 - **Service layer:** capas finas; los componentes describen UI. `emailService` nunca toca AWS.
+- **Email con causa visible:** la function devuelve códigos blancos (`unverified-recipient`) en vez de texto AWS; el frontend los traduce. Nada sensible cruza al navegador.
 - **Nombre visible:** `displayName` con `updateProfile`; header con fallback a email.
 - **Tema por clase `.dark`:** variante custom Tailwind v4 + `localStorage` + preferencia del sistema.
 - **`api/` y no `functions/`:** Vercel descubre las functions en `api/`.
@@ -135,7 +138,7 @@ Patrones que más rindieron:
 
 - **Pedir pasos antes que código:** planificar archivo por archivo evitó reescrituras y redujo el diff.
 - **Ramas descartables para lo riesgoso:** vencimientos y drag&drop se probaron en `exp/plus`; a principal solo llegó lo verificado en verde.
-- **Verificar antes de afirmar:** índice Enabled, test SES recibido, `.env` jamás commiteado y 18→54 tests se comprobaron con comandos, no de memoria.
+- **Verificar antes de afirmar:** índice Enabled, test SES recibido, `.env` jamás commiteado y 18→56 tests se comprobaron con comandos, no de memoria.
 - **Tests para validar, no para cubrir:** cada incremento cerró con `tsc` en 0 y suite en verde antes de commitear; un test fallido frenó un commit y se corrigió con fix dedicado.
 
 Lo que no delegué a la IA: credenciales y secretos (siempre manuales), decisiones de deploy y renombres en GitHub/Vercel (clicks propios), y el criterio final de qué entraba a cada commit.

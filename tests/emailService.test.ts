@@ -23,7 +23,10 @@ describe('sendEmail', () => {
   })
 
   it('lanza si la function responde error', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: false, json: async () => ({}) }),
+    )
 
     await expect(sendEmail(params)).rejects.toThrow('Failed to send email')
   })
@@ -35,5 +38,14 @@ describe('sendEmail', () => {
     }))
 
     await expect(sendEmail(params)).resolves.toEqual({ success: true })
+  })
+
+  it('propaga el código no-verificado', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: 'unverified-recipient' }),
+    }))
+
+    await expect(sendEmail(params)).rejects.toThrow('unverified-recipient')
   })
 })

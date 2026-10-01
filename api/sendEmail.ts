@@ -46,7 +46,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ success: true })
   } catch (error) {
     console.error('SES sendEmail', error)
-
+    // Solo cruzan códigos blancos, nunca texto de AWS (puede traer ARNs o IDs)
+    const code = (error as { Code?: string })?.Code
+    if (code === 'MessageRejected') {
+      return res.status(400).json({ error: 'unverified-recipient' })
+    }
     return res.status(500).json({ error: 'Failed to send email' })
   }
 }

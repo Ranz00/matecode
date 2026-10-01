@@ -125,4 +125,20 @@ describe("TodoList", () => {
         fireEvent.click(screen.getByRole("checkbox"));
         expect(await screen.findByRole("alert")).toHaveTextContent("No se pudo guardar, intentá de nuevo");
     });
+
+    it("explica cuando el destinatario no verifica", async () => {
+        const { sendEmail } = await import("../src/services/emailService");
+        vi.mocked(sendEmail).mockRejectedValueOnce(new Error("unverified-recipient"));
+        mockUseTasks.mockReturnValue({
+            tasks: [
+                { id: "1", title: "Tarea 1", description: "Desc 1", completed: false, userId: "user1", createdAt: new Date(), updatedAt: new Date() },
+            ],
+            loading: false,
+            error: null,
+        });
+        render(<ToastProvider><TodoList /></ToastProvider>);
+
+        fireEvent.click(screen.getByText("Enviar resumen por email"));
+        expect(await screen.findByRole("alert")).toHaveTextContent("no está verificado para recibir");
+    });
 });

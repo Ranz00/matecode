@@ -15,7 +15,10 @@ export const sendEmail = async ({ to, subject, body }: SendEmailParams) => {
     });
 
     if (!response.ok) {
-        throw new Error("Failed to send email");
+        const data = (await response.json().catch(() => null)) as {
+            error?: string;
+        } | null;
+        throw new Error(data?.error || "Failed to send email");
     }
 
     return response.json();

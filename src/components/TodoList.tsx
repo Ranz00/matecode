@@ -133,9 +133,15 @@ export function TodoList() {
       })
       setEmailStatus('sent')
       toast(`Resumen enviado a ${user.email}`)
-    } catch {
+    } catch (e) {
       setEmailStatus('error')
-      toast('No se pudo enviar, intentá de nuevo', 'error')
+      const code = e instanceof Error ? e.message : ''
+      toast(
+        code === 'unverified-recipient'
+          ? 'Tu email no está verificado para recibir en este entorno de prueba. Detalles en el README (sección email).'
+          : 'No se pudo enviar, intentá de nuevo',
+        'error',
+      )
     }
   }
 
