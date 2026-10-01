@@ -4,7 +4,7 @@
 
 Gestor de tareas full-stack — portfolio: React + TypeScript + Firebase Auth/Firestore + AWS SES vía serverless.
 
-> **⚠️ Importante — email con AWS SES en sandbox:** cada resumen va a 2 direcciones (`AWS_SES_TO_EMAIL` fija + usuario logueado). Solo entrega entre identidades verificadas (SES → Verified identities); si una no lo está, rechaza todo. Gmail difiere ~1h y manda a spam (normal en remitente nuevo). La app avisa cada caso en el toast.
+> **⚠️ Importante — email con AWS SES en sandbox:** cada resumen va a 2 direcciones (`AWS_SES_TO_EMAIL` fija + usuario logueado). Solo entrega entre identidades verificadas (SES → Verified identities); si una no lo está, rechaza todo. Cada proveedor filtra a su manera (Gmail difiere ~1h y manda a spam; Outlook/Yahoo a no deseado; corporativos pueden cuarentenar por políticas estrictas). Vale para cualquier dominio del destinatario. La app avisa cada caso en el toast.
 >
 > **Para probarlo con tus credenciales:** `.env.example` trae la plantilla (11 vars sin valores); completala con las tuyas y ambas direcciones SES verificadas en tu cuenta. Sin eso, el email no tiene con qué enviarse.
 >
