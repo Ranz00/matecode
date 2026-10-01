@@ -96,6 +96,11 @@ pnpm test
 - **Nombre visible** (`displayName` con fallback); **dark** por clase + localStorage.
 - **`api/` no `functions/`;** validación con causa que se limpia sola.
 
-## Uso de AI
+## Uso de IA
 
-Uso AI para ir más rápido (Antigravity, OpenCode y Claude), pero el proyecto es mío: arquitectura, decisiones y qué entra a cada commit. Todo verificado con comandos antes de pushear; credenciales y deploys, manuales.
+IA como auxiliar de velocidad, no de criterio: Antigravity (prototipado con el instructor), OpenCode (implementación guiada) y Claude (revisiones).
+
+- Arquitectura por capas y decisiones técnicas propias: contexto único de auth, fail-fast con códigos blancos, orden manual con hundimiento, rewrites SPA.
+- Bugs corregidos y cambios aplicados bajo criterio propio.
+- Verificación con comandos antes de cada commit: `tsc` 0 + suite + e2e manual.
+- Credenciales, deploys, renombres y criterio final de cada commit: manuales.
