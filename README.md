@@ -6,6 +6,8 @@ Gestor de tareas full-stack — portfolio: React + TypeScript + Firebase Auth/Fi
 
 > **⚠️ Importante — email con AWS SES en sandbox:** cada resumen va a 2 direcciones (`AWS_SES_TO_EMAIL` fija + usuario logueado). Solo entrega entre identidades verificadas (SES → Verified identities); si una no lo está, rechaza todo. Gmail difiere ~1h y manda a spam (normal en remitente nuevo). La app avisa cada caso en el toast.
 >
+> **Para probarlo con tus credenciales:** `.env.example` trae la plantilla (11 vars sin valores); completala con las tuyas y ambas direcciones SES verificadas en tu cuenta. Sin eso, el email no tiene con qué enviarse.
+>
 > **Nota — `vercel.json`:** la SPA tiene una sola página real; `rewrites` manda todo lo que no sea `/api/*` a `index.html` (sin esto, refresh en prod da 404). No toca código ni tests.
 >
 > **Credenciales:** el deploy corre con las del dueño (solo visibles en su Vercel). Tu copia usa 100% las tuyas (`.env` + tu Firebase/AWS). Nada se cruza.
